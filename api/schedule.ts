@@ -24,8 +24,8 @@ export const getSchedulesAPI = ({ startDate, endDate }: { startDate: moment.Mome
     }
     return axios.post(config.base_url + '/schedule/read',
         {
-            startDate: startDate.format("YYYY-MM-DD"),
-            endDate: endDate.format("YYYY-MM-DD"),
+            startDate: startDate.format("20YY-MM-DD"),
+            endDate: endDate.format("20YY-MM-DD"),
         })
 };
 export const updateScheduleAPI = (plan: TPlan) => {

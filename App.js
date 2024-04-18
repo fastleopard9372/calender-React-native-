@@ -5,14 +5,13 @@ import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import Header from "./layout/header";
-
+import Calender from "./pages/calender";
 export default function App() {
 	return (
 		<Provider store={store}>
 			<View style={styles.container}>
 				<Header />
-				<Text>App.js to start working on your app!</Text>
-				<Text>This is my first application!</Text>
+				<Calender />
 				<StatusBar style="auto" />
 			</View>
 		</Provider>
@@ -25,5 +24,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		alignItems: "center",
 		justifyContent: "center",
+		width: "100vw",
+		height: "100vh",
 	},
 });

@@ -4,7 +4,7 @@ export const store = configureStore({
     reducer: {
         [CalenderSlice.name]: CalenderSlice.reducer
     },
-    devTools: true,
+    devTools: false,
 });
 
 

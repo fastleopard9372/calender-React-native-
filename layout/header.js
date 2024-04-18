@@ -54,8 +54,8 @@ const App = () => {
 	const openMenuKind = () => setVisible({ year: false, month: false, kind_flag: true });
 	const closeMenu = () => setVisible({ year: false, month: false, kind_flag: false });
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<View style={{ flex: 1, padding: 16, paddingTop: 48 }}>
+		<SafeAreaView style={styles.container}>
+			<View style={styles.header}>
 				<PaperProvider>
 					<View style={styles.appMenu}>
 						<IconButton icon="plus" mode="contained" size={20} onPress={() => console.log("Pressed")} />
@@ -80,7 +80,7 @@ const App = () => {
 										<Menu.Item
 											key={i}
 											onPress={() => handleClickYear(date.year() + i - 3)}
-											title={2000 + date.year() + i - 3}
+											title={Number(date.format("20YY")) + i - 3}
 										/>
 									))}
 							</Menu>
@@ -113,20 +113,13 @@ const App = () => {
 									</IconButton>
 								}
 							>
-								<Menu.Item onPress={() => {}} title="Month 1" />
-								<Menu.Item onPress={() => {}} title="Month 2" />
-								<Menu.Item onPress={() => {}} title="Week" />
+								<Menu.Item onPress={() => handleClickKind("month_1")} title="Month 1" />
+								<Menu.Item onPress={() => handleClickKind("month_2")} title="Month 2" />
+								<Menu.Item onPress={() => handleClickKind("week")} title="Week" />
 							</Menu>
 						</View>
 					</View>
 				</PaperProvider>
-				<View style={styles.container}>
-					<Text style={styles.heading}> Example to Use React Native Vector Icons </Text>
-					<View style={styles.iconContainer}></View>
-					<View style={{ marginTop: 16, marginBottom: 16 }}></View>
-				</View>
-				<Text style={styles.footerTitle}> Vector Icons </Text>
-				<Text style={styles.footerText}> www.aboutreact.com </Text>
 			</View>
 		</SafeAreaView>
 	);
@@ -141,31 +134,14 @@ const styles = StyleSheet.create({
 		gap: 1,
 	},
 	container: {
+		height: 100,
+		position: "relative",
+		zIndex: 1000,
+	},
+	header: {
 		flex: 1,
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	heading: {
-		fontSize: 20,
-		textAlign: "center",
-		marginBottom: 20,
-	},
-	iconContainer: {
-		marginTop: 16,
-		marginBottom: 16,
-		justifyContent: "center",
-		alignItems: "center",
-		textAlign: "center",
-	},
-	footerTitle: {
-		fontSize: 18,
-		textAlign: "center",
-		color: "grey",
-	},
-	footerText: {
-		fontSize: 16,
-		textAlign: "center",
-		color: "grey",
+		padding: 16,
+		paddingTop: 48,
 	},
 });
 
