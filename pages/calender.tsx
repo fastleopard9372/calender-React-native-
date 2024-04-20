@@ -116,7 +116,7 @@ const Calender = () => {
     useEffect(() => {
         // dispatch(setPlan(plan1))
         getSchedulesAPI({ startDate, endDate }).then((schedules: any) => {
-            console.log("data:", schedules)
+            // console.log("data:", schedules)
             dispatch(setPlan(schedules.data))
         })
     }, [calender_data.date, kind])

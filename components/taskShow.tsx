@@ -26,12 +26,12 @@ const TaskShow = () => {
     const { isTaskShowShowDialog } = useAppSelector(getCalender);
     const list = plan?.filter((v: TPlan, i: number) =>
         (date.isBetween(v.startDate, v.endDate, "day", "[]")))
-        .map((v, i) => ({ key: i, value: cutString(v.title, 60) }))
+        .map((v, i) => ({ key: v._id, value: cutString(v.title, 60) }))
     const hideModal = () => {
         dispatch(setIsTaskShowShowDialog(false));
     }
-    const handleDataShow = (i: number) => {
-        setData(plan == undefined ? undefined : plan[i]);
+    const handleDataShow = (id: string) => {
+        setData(plan == undefined ? undefined : plan.find(v => v._id === id));
     }
     const handleEdit = (data: TPlan | undefined) => {
         dispatch(setNewPlan(data));
@@ -104,7 +104,7 @@ const TaskShow = () => {
                                 <Text variant="headlineLarge" style={styles.header}>{date.format("YYYY-MM-DD")}</Text>
                             </View>
                             <SelectList
-                                setSelected={(val: number) => handleDataShow(val)}
+                                setSelected={(val: string) => handleDataShow(val)}
                                 data={list}
                                 save="key"
                                 boxStyles={{

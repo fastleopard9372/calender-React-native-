@@ -17,7 +17,8 @@ const TaskCreate = () => {
     const { isShowDialog, scheduleKind, colors, thickness, newPlan, action } = useAppSelector(getCalender);
     const [data, setData] = useState<TPlan>(newPlan)
     const [visibleLine, setVisibleLine] = React.useState(false);
-    const [showCalender, setShowCalender] = useState(false)
+    const [showCalenderS, setShowCalenderS] = useState(false)
+    const [showCalenderE, setShowCalenderE] = useState(false)
     const [error, setError] = useState({
         message: "",
         open: false
@@ -62,18 +63,18 @@ const TaskCreate = () => {
                 dispatch(updatePlan(schedule.data))
                 dispatch(setIsShowDialog(!isShowDialog))
                 // toast.info("Plan is updated");
-            }).catch(() => {
+            }).catch((error) => {
                 setError({
                     message: "Server Error.",
                     open: true
                 })
             })
-        } else if ("Create") {
+        } else if (action == "Create") {
             addScheduleAPI(data).then((schedule) => {
                 dispatch(addPlan(schedule.data))
                 dispatch(setIsShowDialog(!isShowDialog))
                 // toast.info("Plan is added newly");
-            }).catch(() => {
+            }).catch((error) => {
                 setError({
                     message: "Server Error.",
                     open: true
@@ -82,17 +83,18 @@ const TaskCreate = () => {
         }
     }
     const handleStartDateChange = (date: moment.Moment) => {
-        setShowCalender(false);
+        setShowCalenderS(false);
         setData({ ...data, startDate: date.format("YYYY-MM-DD") })
     }
     const handleEndDateChange = (date: moment.Moment) => {
-        setShowCalender(false);
+        setShowCalenderE(false);
         setData({ ...data, endDate: date.format("YYYY-MM-DD") })
     }
     const handleKind = (value: string) => {
         setData({ ...data, kind: value })
     }
-    const handleInputChange = (name: string, value: any) => {
+    const handleInputChange = (name: string, value: string) => {
+        console.log(name, value)
         setData({ ...data, [name]: value })
     }
     const hideModal = () => {
@@ -157,7 +159,7 @@ const TaskCreate = () => {
                                 <TextInput
                                     mode='outlined'
                                     value={data?.title}
-                                    onChange={(text) => handleInputChange("title", text)}
+                                    onChangeText={(text) => handleInputChange("title", text)}
                                 />
                             </View>
                             <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -233,7 +235,7 @@ const TaskCreate = () => {
                                     mode='outlined'
                                     multiline={true}
                                     value={data?.demo}
-                                    onChange={(text) => handleInputChange("demo", text)}
+                                    onChangeText={(text) => handleInputChange("demo", text)}
                                     style={{
                                         minHeight: 400
                                     }}
@@ -242,20 +244,20 @@ const TaskCreate = () => {
                             <Text style={styles.title_1}>Date</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Button mode='contained-tonal' onPress={() =>
-                                    setShowCalender(true)
-                                }>{data?.startDate}</Button>
+                                    setShowCalenderS(true)
+                                }>{moment(data?.startDate).format("YYYY-MM-DD")}</Button>
                                 <Text> ~ </Text>
                                 <Button mode='contained-tonal' onPress={() =>
-                                    setShowCalender(true)
-                                }>{data?.endDate}</Button>
+                                    setShowCalenderE(true)
+                                }>{moment(data?.endDate).format("YYYY-MM-DD")}</Button>
                             </View>
-                            {showCalender && <RNDateTimePicker
+                            {showCalenderS && <RNDateTimePicker
                                 value={moment(data?.startDate).toDate()}
                                 mode='date'
                                 onChange={(event: any, date: Date) => handleStartDateChange(moment(date))}
                             />}
 
-                            {showCalender && <RNDateTimePicker
+                            {showCalenderE && <RNDateTimePicker
                                 value={moment(data?.endDate).toDate()}
                                 mode='date'
                                 minimumDate={moment(data?.startDate).toDate()}

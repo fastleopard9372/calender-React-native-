@@ -4,7 +4,6 @@ import config from "../config";
 import { TPlan } from "../type";
 
 export const addScheduleAPI = (data: TPlan) => {
-
     return axios.post(config.base_url + '/schedule', {
         title: data.title,
         demo: data.demo,

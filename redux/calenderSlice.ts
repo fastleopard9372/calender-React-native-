@@ -15,17 +15,17 @@ const initialState: {
     action: string,
 } =
 {
-    date: moment(new Date()).format("MM-DD-YYYY"),
+    date: moment(new Date()).format("20YY-MM-DD"),
     kind: "month_1",
     plan: undefined,
     isShowDialog: false,
     isTaskShowShowDialog: false,
     scheduleKind: [
-        { _id: "1", name: "meeting" },
-        { _id: "2", name: "dating" },
-        { _id: "3", name: "holiday" },
-        { _id: "4", name: "birthday" },
-        { _id: "5", name: "work" },
+        // { _id: "1", name: "meeting" },
+        // { _id: "2", name: "dating" },
+        // { _id: "3", name: "holiday" },
+        // { _id: "4", name: "birthday" },
+        // { _id: "5", name: "work" },
     ],
     colors: [
         "red", "green", "blue", "yellow", "orange", "purple", "pink", "teal", "brown", "gray", "cyan", "magenta", "indigo", "lime", "olive", "coral"],

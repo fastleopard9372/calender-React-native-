@@ -4,7 +4,15 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import moment from "moment";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { useAppSelector, useAppDispatch } from "../redux/hook";
-import { setDate, setKind, getCalender, setIsShowDialog, setAction, setNewPlan } from "../redux/calenderSlice";
+import {
+	setDate,
+	setKind,
+	getCalender,
+	setIsShowDialog,
+	setIsTaskShowShowDialog,
+	setAction,
+	setNewPlan,
+} from "../redux/calenderSlice";
 
 const App = () => {
 	const [visible, setVisible] = React.useState({
@@ -54,6 +62,7 @@ const App = () => {
 		);
 		dispatch(setAction("Create"));
 		dispatch(setIsShowDialog(true));
+		dispatch(setIsTaskShowShowDialog(false));
 	};
 	const openMenuYear = () => setVisible({ year: true, month: false, kind_flag: false });
 	const openMenuMonth = () => setVisible({ year: false, month: true, kind_flag: false });
