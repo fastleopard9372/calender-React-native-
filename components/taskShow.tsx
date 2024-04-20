@@ -64,8 +64,7 @@ const TaskShow = () => {
     }
     const handleDeleteOk = () => {
         const id = data._id;
-        console.log(id)
-        alertRef.current.open();
+        alertRef.current.close();
         deleteScheduleAPI(id).then((schedule) => {
             dispatch(deletePlan(schedule.data.id))
             // toast.info("Plan is deleted");
