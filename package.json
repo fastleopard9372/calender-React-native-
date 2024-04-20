@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@callstack/react-theme-provider": "^3.0.9",
+    "@react-native-community/datetimepicker": "^7.7.0",
     "@react-native-picker/picker": "^2.7.5",
     "@reduxjs/toolkit": "^2.2.3",
     "@types/react": "~18.2.45",
@@ -21,7 +22,6 @@
     "react": "18.2.0",
     "react-native": "0.73.6",
     "react-native-alert-pro": "^1.1.2",
-    "react-native-date-picker": "^5.0.2",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-paper": "^5.12.3",
     "react-native-paper-dropdown": "^1.0.7",

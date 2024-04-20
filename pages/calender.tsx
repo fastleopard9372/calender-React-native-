@@ -85,40 +85,40 @@ const Calender = () => {
     const dispatch = useAppDispatch();
     const startDate = date.clone().startOf('month').startOf('week');
     const endDate = date.clone().endOf('month').endOf('week');
-    const plan1: TPlan[] = [
-        {
-            _id: "1", color: 'red', width: 4, startDate: "2010-03-13", endDate: "2010-03-19", title: "title1", demo: "This is my demo1", kind: '1', user: { id: '', username: '', email: '' },
-            createdAt: '',
-            updatedAt: '',
-            __v: ''
-        }, {
-            _id: "2", color: 'blue', width: 4, startDate: "2010-03-02", endDate: "2010-03-15", title: "title2", demo: "This is my demo2", kind: '1', user: { id: '', username: '', email: '' },
-            createdAt: '',
-            updatedAt: '',
-            __v: ''
-        }, {
-            _id: "3", color: 'green', width: 4, startDate: "2010-03-25", endDate: "2010-04-16", title: "title3", demo: "This is my demo3", kind: '2', user: { id: '', username: '', email: '' },
-            createdAt: '',
-            updatedAt: '',
-            __v: ''
-        }, {
-            _id: "4", color: 'cyan', width: 4, startDate: "2010-03-02", endDate: "2010-03-22", title: "title4", demo: "This is my demo4", kind: '3', user: { id: '', username: '', email: '' },
-            createdAt: '',
-            updatedAt: '',
-            __v: ''
-        }, {
-            _id: "5", color: 'magenta', width: 4, startDate: "2010-03-16", endDate: "2010-03-22", title: "title5", demo: "This is my demo5", kind: '1', user: { id: '', username: '', email: '' },
-            createdAt: '',
-            updatedAt: '',
-            __v: ''
-        },
-    ]
+    // const plan1: TPlan[] = [
+    //     {
+    //         _id: "1", color: 'red', width: 4, startDate: "2010-03-13", endDate: "2010-03-19", title: "title1", demo: "This is my demo1", kind: '1', user: { id: '', username: '', email: '' },
+    //         createdAt: '',
+    //         updatedAt: '',
+    //         __v: ''
+    //     }, {
+    //         _id: "2", color: 'blue', width: 4, startDate: "2010-03-02", endDate: "2010-03-15", title: "title2", demo: "This is my demo2", kind: '1', user: { id: '', username: '', email: '' },
+    //         createdAt: '',
+    //         updatedAt: '',
+    //         __v: ''
+    //     }, {
+    //         _id: "3", color: 'green', width: 4, startDate: "2010-03-25", endDate: "2010-04-16", title: "title3", demo: "This is my demo3", kind: '2', user: { id: '', username: '', email: '' },
+    //         createdAt: '',
+    //         updatedAt: '',
+    //         __v: ''
+    //     }, {
+    //         _id: "4", color: 'cyan', width: 4, startDate: "2010-03-02", endDate: "2010-03-22", title: "title4", demo: "This is my demo4", kind: '3', user: { id: '', username: '', email: '' },
+    //         createdAt: '',
+    //         updatedAt: '',
+    //         __v: ''
+    //     }, {
+    //         _id: "5", color: 'magenta', width: 4, startDate: "2010-03-16", endDate: "2010-03-22", title: "title5", demo: "This is my demo5", kind: '1', user: { id: '', username: '', email: '' },
+    //         createdAt: '',
+    //         updatedAt: '',
+    //         __v: ''
+    //     },
+    // ]
     useEffect(() => {
-        dispatch(setPlan(plan1))
-        // getSchedulesAPI({ startDate, endDate }).then((schedules: any) => {
-        //     console.log("data:", schedules)
-        //     dispatch(setPlan(schedules.data))
-        // })
+        // dispatch(setPlan(plan1))
+        getSchedulesAPI({ startDate, endDate }).then((schedules: any) => {
+            console.log("data:", schedules)
+            dispatch(setPlan(schedules.data))
+        })
     }, [calender_data.date, kind])
 
     useEffect(() => {

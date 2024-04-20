@@ -34,8 +34,8 @@ const TaskShow = () => {
         setData(plan == undefined ? undefined : plan[i]);
     }
     const handleEdit = (data: TPlan | undefined) => {
-        dispatch(setAction("Edit"));
         dispatch(setNewPlan(data));
+        dispatch(setAction("Edit"));
         dispatch(setIsTaskShowShowDialog(false));
         dispatch(setIsShowDialog(true));
     }
@@ -151,10 +151,10 @@ const TaskShow = () => {
                                     </Text>
                                 </View>
                                 <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
-                                    <IconButton icon={'plus-circle'} size={40} iconColor={MD3Colors.primary40} style={{ margin: 0 }} onPress={e => handleEdit(data)} />
+                                    <IconButton icon={'plus-circle'} size={40} iconColor={MD3Colors.primary40} style={{ margin: 0 }} onPress={e => handleCreate(date)} />
                                     {data &&
                                         <>
-                                            <IconButton icon={'pencil-circle'} iconColor={MD3Colors.primary40} style={{ margin: 0 }} size={40} onPress={e => handleCreate(date)} />
+                                            <IconButton icon={'pencil-circle'} iconColor={MD3Colors.primary40} style={{ margin: 0 }} size={40} onPress={e => handleEdit(data)} />
                                             <IconButton icon={'delete-circle'} size={40} iconColor={MD3Colors.primary40} style={{ margin: 0, marginBottom: 40 }} onPress={handleDelete} />
                                         </>
                                     }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, IconButton, PaperProvider, Menu } from "react-native-paper";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import moment from "moment";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { useAppSelector, useAppDispatch } from "../redux/hook";
 import { setDate, setKind, getCalender, setIsShowDialog, setAction, setNewPlan } from "../redux/calenderSlice";
 
@@ -11,6 +12,7 @@ const App = () => {
 		month: false,
 		kind_flag: false,
 	});
+	const [showCalender, setShowCalender] = useState(false);
 	const dispatch = useAppDispatch();
 	const date = moment(useAppSelector(getCalender).date);
 	const handleClickMonth = (kind, value) => {
@@ -23,10 +25,14 @@ const App = () => {
 		dispatch(setDate(date.clone().year(year).format("20YY-MM-DD")));
 	};
 	const handleClickToday = () => {
-		dispatch(setDate(moment(new Date()).format("MM-DD-20YY")));
+		dispatch(setDate(moment(new Date()).format("20YY-MM-DD")));
 	};
 	const handleClickKind = (m_kind) => {
 		dispatch(setKind(m_kind));
+	};
+	const handleDateChange = (date) => {
+		setShowCalender(false);
+		dispatch(setDate(date.format("20YY-MM-DD")));
 	};
 	const handleDialogOpen = () => {
 		dispatch(
@@ -69,7 +75,18 @@ const App = () => {
 								justifyContent: "center",
 							}}
 						>
-							<Menu
+							<Button mode="elevated" onPress={() => setShowCalender(true)}>
+								{moment(useAppSelector(getCalender).date).format("YYYY - MM")}
+							</Button>
+							{showCalender && (
+								<RNDateTimePicker
+									value={moment(date).toDate()}
+									display="spinner"
+									mode="date"
+									onChange={(e, date) => handleDateChange(moment(date))}
+								/>
+							)}
+							{/* <Menu
 								visible={visible.year}
 								onDismiss={closeMenu}
 								anchor={<Button onPress={openMenuYear}> {date.format("20YY")} </Button>}
@@ -94,7 +111,7 @@ const App = () => {
 									.map((v, i) => (
 										<Menu.Item key={i} onPress={() => handleClickMonthD(i)} title={moment().month(i).format("MMM")} />
 									))}
-							</Menu>
+							</Menu> */}
 						</View>
 						<IconButton icon="arrow-right" mode="contained" size={20} onPress={() => handleClickMonth("months", +1)} />
 
@@ -134,8 +151,9 @@ const styles = StyleSheet.create({
 		gap: 1,
 	},
 	container: {
-		height: 100,
+		height: 120,
 		position: "relative",
+
 		zIndex: 1000,
 	},
 	header: {

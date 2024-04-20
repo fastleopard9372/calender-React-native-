@@ -13,11 +13,18 @@ const ColorIcon = ({ value, selected, handleClick }: { value: string, selected: 
             overflow: 'hidden',
         }}>
             <TouchableRipple
-                style={{ flex: 1, borderRadius: 50 }}
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 50,
+                }}
                 onPress={() => handleClick(value)}
                 rippleColor="rgba(0, 0, 0, .32)"
             >
-                {selected ? <IconButton icon={'check-circle'} /> : <></>}
+                {selected ? <IconButton iconColor='white' icon={'check-circle'} /> : <></>}
             </TouchableRipple>
         </Surface>
     )

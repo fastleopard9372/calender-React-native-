@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Text, Portal, Modal, Surface, IconButton, TextInput, MD3Colors } from 'react-native-paper'
-import DatePicker from "react-native-date-picker";
+import { Text, Portal, Modal, Surface, IconButton, Button, TextInput, MD3Colors, TouchableRipple, Icon } from 'react-native-paper'
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { updateScheduleAPI, addScheduleAPI } from '../api/schedule'
 import ColorIcon from './colorIcon';
-// import LineThickness from './lineThickness';
+import LineThickness from './lineThickness';
 import { useAppDispatch, useAppSelector } from '../redux/hook';
-import { getCalender, setDate, updatePlan, addPlan, setIsShowDialog, setAction, setNewPlan, deletePlan } from '../redux/calenderSlice';
-// import Alert from './alert';
+import { getCalender, setDate, updatePlan, addPlan, setIsShowDialog } from '../redux/calenderSlice';
 import { TPlan, TScheduleKind } from '../type';
 
 
 const TaskCreate = () => {
     const dispatch = useAppDispatch();
     const { isShowDialog, scheduleKind, colors, thickness, newPlan, action } = useAppSelector(getCalender);
-
     const [data, setData] = useState<TPlan>(newPlan)
+    const [visibleLine, setVisibleLine] = React.useState(false);
+    const [showCalender, setShowCalender] = useState(false)
     const [error, setError] = useState({
         message: "",
         open: false
@@ -28,32 +28,29 @@ const TaskCreate = () => {
     const handleLineThicknessClick = (e: number) => {
         setData({ ...data, width: e })
     }
-    const handleOpenChange = (open: boolean) => {
-        dispatch(setIsShowDialog(open))
-    }
     const handleSubmit = () => {
-        if (moment(data.endDate).isBefore(data.startDate)) {
+        if (moment(data?.endDate).isBefore(data?.startDate)) {
             setError({
                 message: "End date must be after start date",
                 open: true
             })
             return
         }
-        if (data.kind == "-1" || data.kind == "") {
+        if (data?.kind == "-1" || data?.kind == "") {
             setError({
                 message: "Kind must be selected",
                 open: true
             })
             return
         }
-        if (data.title == "") {
+        if (data?.title == "") {
             setError({
                 message: "Title must be required",
                 open: true
             })
             return
         }
-        if (data.demo == "") {
+        if (data?.demo == "") {
             setError({
                 message: "Demo must be required",
                 open: true
@@ -85,9 +82,11 @@ const TaskCreate = () => {
         }
     }
     const handleStartDateChange = (date: moment.Moment) => {
+        setShowCalender(false);
         setData({ ...data, startDate: date.format("YYYY-MM-DD") })
     }
     const handleEndDateChange = (date: moment.Moment) => {
+        setShowCalender(false);
         setData({ ...data, endDate: date.format("YYYY-MM-DD") })
     }
     const handleKind = (value: string) => {
@@ -99,9 +98,11 @@ const TaskCreate = () => {
     const hideModal = () => {
         dispatch(setIsShowDialog(false));
     }
+
+    const showModalLine = () => setVisibleLine(true);
+    const hideModalLine = () => setVisibleLine(false);
     useEffect(() => {
-        console.log("new plan")
-        if (data.kind == "-1") {
+        if (data?.kind == "-1") {
             setError({
                 message: "Kind must be started",
                 open: true
@@ -109,7 +110,7 @@ const TaskCreate = () => {
         } else {
             setError({ message: "", open: false })
         }
-        if (moment(newPlan.endDate).isBefore(moment(newPlan.startDate))) {
+        if (moment(newPlan?.endDate).isBefore(moment(newPlan?.startDate))) {
             setError({
                 message: "End date must be after start date",
                 open: true
@@ -119,11 +120,10 @@ const TaskCreate = () => {
         }
         setData(newPlan);
     }, [newPlan])
-
     const kindSch = scheduleKind.map((v: TScheduleKind, i: number) =>
         ({ key: v._id, value: v.name })
     )
-    const current_kindSch = action == "Edit" ? kindSch.find((v: any) => v.key == data.kind) : kindSch[0]
+    const current_kindSch = action == "Edit" ? kindSch.find((v: any) => v.key == data?.kind) : { key: "", value: "" }
     const containerStyle = {
         flex: 1,
         margin: 0
@@ -131,125 +131,180 @@ const TaskCreate = () => {
     return (
         <>
             <Portal>
-                <Modal visible={isShowDialog} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                <Modal visible={isShowDialog} onDismiss={hideModalLine} contentContainerStyle={containerStyle}>
                     <Surface style={styles.containerStyle}>
                         <SafeAreaView style={styles.safeContainerStyle}>
                             <IconButton icon={'close-circle'} iconColor={MD3Colors.primary40} size={32} onPress={hideModal} style={{ position: 'absolute', right: 10, top: 10, zIndex: 100 }} />
                             <View>
-                                <Text variant="headlineLarge" style={styles.header}>Create Schedule</Text>
+                                <Text variant="headlineLarge" style={styles.header}>{action} Schedule</Text>
                             </View>
+                            {
+                                error.open && <View style={{
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    backgroundColor: '#FF000060',
+                                    paddingLeft: 20,
+                                    borderRadius: 10,
+                                    marginTop: 10
+                                }}>
+                                    <Text>{error.message}</Text>
+                                    <IconButton icon={'close'} iconColor={MD3Colors.primary40} size={24} onPress={() => setError({ message: '', open: false })} />
+                                </View>
+                            }
                             <View>
+                                <Text style={styles.title_1}>Title</Text>
                                 <TextInput
-                                    label="Title"
                                     mode='outlined'
-                                    value={data.title}
+                                    value={data?.title}
                                     onChange={(text) => handleInputChange("title", text)}
                                 />
                             </View>
-                            <View style={{ flex: 1 }}>
-                                <Text>Line Color:</Text>
-                                <View>
-                                    {colors.map((v: string, i: number) => (
-                                        <ColorIcon key={i} value={v} selected={v === data.color} handleClick={handleColorClick} />
-                                    ))}
+                            <View style={{ flexDirection: 'row', gap: 10 }}>
+                                <View >
+                                    <Text style={styles.title_1}>Line Color</Text>
+                                    <View>
+                                        <View style={{ gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <Surface style={{
+                                                width: 150,
+                                                height: 40,
+                                                borderRadius: 5,
+                                                backgroundColor: MD3Colors.primary90,
+                                                position: 'relative',
+                                                overflow: 'hidden',
+                                            }}>
+                                                <TouchableRipple
+                                                    style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        borderRadius: 50,
+                                                    }}
+                                                    onPress={showModalLine}
+                                                    rippleColor="rgba(0, 0, 0, .32)"
+                                                >
+                                                    <>
+                                                        <View style={{ gap: 2, flexDirection: 'row' }}>
+                                                            <Text style={{ fontWeight: '600' }}>{data?.width}</Text>
+                                                            <Text>px </Text>
+                                                        </View>
+                                                        <View style={{
+                                                            width: '80%',
+                                                            height: data?.width,
+                                                            backgroundColor: data?.color
+                                                        }}>
+                                                        </View>
+                                                    </>
+                                                </TouchableRipple>
+                                            </Surface >
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={{
+                                    width: 150
+                                }}>
+                                    <Text style={styles.title_1}>Kind</Text>
+                                    <SelectList
+                                        setSelected={(val: string) => handleKind(val)}
+                                        data={scheduleKind.map((v: TScheduleKind, i: number) =>
+                                            ({ key: v._id, value: v.name })
+                                        )}
+                                        save="key"
+                                        boxStyles={{
+                                            position: 'relative'
+                                        }}
+                                        dropdownStyles={{
+                                            top: 40,
+                                            position: 'absolute',
+                                            backgroundColor: 'white',
+                                            width: '100%',
+                                            zIndex: 100
+                                        }}
+
+                                        defaultOption={current_kindSch}
+                                    />
                                 </View>
                             </View>
                             <View>
+                                <Text style={styles.title_1}>Demo</Text>
                                 <TextInput
-                                    label="Demo"
                                     mode='outlined'
                                     multiline={true}
-                                    value={data.demo}
+                                    value={data?.demo}
                                     onChange={(text) => handleInputChange("demo", text)}
                                     style={{
                                         minHeight: 400
                                     }}
                                 />
                             </View>
-                            <SelectList
-                                setSelected={(val: string) => handleKind(val)}
-                                data={scheduleKind.map((v: TScheduleKind, i: number) =>
-                                    ({ key: v._id, value: v.name })
-                                )}
-                                save="key"
-                                boxStyles={{
-                                    position: 'relative'
-                                }}
-                                dropdownStyles={{
-                                    top: 40,
-                                    position: 'absolute',
-                                    backgroundColor: 'white',
-                                    width: '100%',
-                                    zIndex: 100
-                                }}
-
-                                defaultOption={current_kindSch}
-                            />
-                            {/* <View style={{ flex: 1, marginVertical: 10, borderColor: 'gray', borderWidth: 1, borderRadius: 10 }}>
-                                <View style={{
-                                    margin: 10,
-                                    flexWrap: "wrap",
-                                    flexDirection: "row",
-                                    gap: 10
-                                }}>
-                                    {data == undefined && <Text variant="titleLarge" style={styles.title}>There is no schedule to display</Text>}
-                                    <Text variant="titleLarge">{data?.title}</Text>
-                                    {kind !== "-1" && <Badge style={{ paddingHorizontal: 10 }}>{kind}</Badge>}
-                                </View>
-                                {data && <Divider />}
-                                <View style={{ margin: 10 }}>
-                                    <Text variant='labelLarge'>{data?.demo}</Text>
-                                </View>
-                                {data && <Divider />}
-                                <View>
-                                    <Text variant='labelSmall' style={{ margin: 10, color: '#555', textAlign: 'center' }}>
-                                        {
-                                            data != undefined && (moment(data?.endDate).isSame(moment(data.startDate)) ?
-                                                `${moment(data?.startDate).format("YYYY-MM-DD")}` :
-                                                `${moment(data?.startDate).format("YYYY-MM-DD")} ~ ${moment(data?.endDate).format("YYYY-MM-DD")} (${moment(data?.endDate).diff(moment(data?.startDate), 'days') + 1} days)`)
-                                        }
-                                    </Text>
-                                </View>
-                                <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
-                                    <IconButton icon={'plus-circle'} size={40} iconColor={MD3Colors.primary40} style={{ margin: 0 }} onPress={e => handleEdit(data)} />
-                                    {data &&
-                                        <>
-                                            <IconButton icon={'pencil-circle'} iconColor={MD3Colors.primary40} style={{ margin: 0 }} size={40} onPress={e => handleCreate(date)} />
-                                            <IconButton icon={'delete-circle'} size={40} iconColor={MD3Colors.primary40} style={{ margin: 0, marginBottom: 40 }} onPress={handleDelete} />
-                                        </>
-                                    }
-                                </View>
+                            <Text style={styles.title_1}>Date</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Button mode='contained-tonal' onPress={() =>
+                                    setShowCalender(true)
+                                }>{data?.startDate}</Button>
+                                <Text> ~ </Text>
+                                <Button mode='contained-tonal' onPress={() =>
+                                    setShowCalender(true)
+                                }>{data?.endDate}</Button>
                             </View>
-                            <AlertPro
-                                ref={alertRef}
-                                onConfirm={handleDeleteOk}
-                                onCancel={() => alertRef.current.close()}
-                                message="Are you sure to delete this plan?"
-                                textCancel="No"
-                                textConfirm="Yes"
-                                customStyles={{
-                                    mask: {
-                                        // backgroundColor: "transparent"
-                                    },
-                                    container: {
-                                        borderWidth: 1,
-                                        borderColor: "#9900cc",
-                                        shadowColor: "#000000",
-                                        shadowOpacity: 0.1,
-                                        shadowRadius: 20
-                                    },
-                                    buttonCancel: {
-                                        backgroundColor: 'gray',
-                                        borderRadius: 30
-                                    },
-                                    buttonConfirm: {
-                                        backgroundColor: MD3Colors.primary40,
-                                        borderRadius: 30
-                                    }
-                                }}
-                            /> */}
+                            {showCalender && <RNDateTimePicker
+                                value={moment(data?.startDate).toDate()}
+                                mode='date'
+                                onChange={(event: any, date: Date) => handleStartDateChange(moment(date))}
+                            />}
+
+                            {showCalender && <RNDateTimePicker
+                                value={moment(data?.endDate).toDate()}
+                                mode='date'
+                                minimumDate={moment(data?.startDate).toDate()}
+                                onChange={(event: any, date: Date) => handleEndDateChange(moment(date))}
+                            />}
+                            <Button mode="contained" onPress={handleSubmit} style={{ marginTop: 20 }}>
+                                Submit
+                            </Button>
                         </SafeAreaView>
                     </Surface>
+                </Modal>
+                <Modal
+                    visible={visibleLine}
+                    onDismiss={hideModalLine}
+                    contentContainerStyle={{
+                        backgroundColor: 'white',
+                        padding: 20,
+                        margin: 30,
+                        position: 'relative',
+                        borderRadius: 10
+                    }}>
+                    <View>
+                        <Text variant="headlineMedium" style={styles.header}>Line Setting</Text>
+                    </View>
+                    <IconButton icon={'close-circle'} iconColor={MD3Colors.primary40} size={32} onPress={hideModalLine} style={{ position: 'absolute', right: 10, top: 10, zIndex: 100 }} />
+                    <Text>Line Color</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        gap: 3,
+                        marginTop: 10
+                    }}>
+                        {colors.map((v: string, i: number) => (
+                            <ColorIcon key={i} value={v} selected={v === data?.color} handleClick={handleColorClick} />
+                        ))}
+                    </View>
+                    <Text style={{ marginTop: 20 }}>Line Thickness</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        gap: 10,
+                        marginTop: 10
+                    }}>
+                        {thickness.map((v: number, i: number) => (
+                            <LineThickness key={i} value={v} color={data?.color} selected={data?.width === v} handleClick={handleLineThicknessClick} />
+                        ))}
+                    </View>
                 </Modal>
             </Portal >
 
@@ -292,4 +347,9 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: '100%',
     },
+    title_1: {
+        marginTop: 10,
+        marginLeft: 10,
+        marginBottom: 5
+    }
 });
