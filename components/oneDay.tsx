@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import moment from 'moment'
 import { useAppDispatch, useAppSelector } from '../redux/hook';
-import { getCalender, setDate } from '../redux/calenderSlice';
+import { getCalender, setDate, setIsTaskShowShowDialog } from '../redux/calenderSlice';
 // import TaskShow from './taskShow'
 import { View, StyleSheet } from 'react-native'
-import { Text, FAB } from 'react-native-paper'
+import { Text, Portal, Modal, TouchableRipple } from 'react-native-paper'
 import TOneDay, { TPlan } from '../type'
 
 const Bar = ({ color, width, position }: { color: string; position: number; width?: number }) => {
@@ -133,11 +133,17 @@ const Conner = ({ no, width, color, position }: { no: number; width?: number; co
         }}></View>)
     }
 }
+
+
 const OneDay = (prop: TOneDay) => {
     const dispatch = useAppDispatch();
     const kind = useAppSelector(getCalender).kind;
     const { no, month, datesCnt, plan, width, color } = prop;
     const date = moment(prop.date);
+    const handleShowModal = () => {
+        dispatch(setIsTaskShowShowDialog(true));
+        dispatch(setDate(date.format("YYYY-MM-DD")));
+    }
     const handleIconButton = (date: moment.Moment) => {
         dispatch(setDate(date.format("YYYY-MM-DD")));
         // dispatch(setDateAndPlan({ date: date.format("YYYY-MM-DD"), plan }))
@@ -378,7 +384,7 @@ const OneDay = (prop: TOneDay) => {
             return null;
         }
     });
-    let dateColor = '#eeeeee';
+    let dateColor = '#f5f5f5';
     let buttonBorderColor: any = "gray";
     if (date.month() === month) buttonBorderColor = 'indigo'
     if (planDay) buttonBorderColor = "red"
@@ -388,34 +394,30 @@ const OneDay = (prop: TOneDay) => {
 
     return (
         <View style={styles.container} >
-            {/* <Popover.Root>
-                <Popover.Trigger className={`!absolute !z-50  cursor-pointer`}> */}
-            {/* <IconButton
-                        className={` ${dateColor} cursor-pointer border-2 !font-medium`}
-                        style={{ left: 'calc(50% - 20px)', backgroundColor: dateColor }}
-                        size="3" radius="full" variant="outline" color={buttonBorderColor} // highContrast={date.month() === month} 
-                        onClick={e => handleIconButton(date)}
-                    >
-                        {date.date()}
-                    </IconButton> */}
             <View style={{
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
                 position: 'absolute',
+                overflow: 'hidden',
                 borderRadius: 30,
                 borderWidth: 1.5,
-                width: 36,
-                height: 36,
                 zIndex: 1000,
                 backgroundColor: dateColor,
-                borderColor: buttonBorderColor
+                borderColor: buttonBorderColor,
+                width: 36,
+                height: 36
             }}>
-                <Text style={{ fontWeight: '500' }} onPress={() => console.log("press")}>{date.date()}</Text>
+                <TouchableRipple onPress={handleShowModal} style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: 36,
+                    height: 36,
+                }}>
+                    <Text style={{ fontWeight: '500' }} >{date.date()}</Text>
+                </TouchableRipple>
             </View>
-            {/* </Popover.Trigger> */}
-            {/* {<TaskShow />} */}
-            {/* </Popover.Root> */}
             {cornerL}
             {
                 cornerL == null &&

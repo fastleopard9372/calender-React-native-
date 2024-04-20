@@ -19,7 +19,7 @@ export interface TPlan {
 export interface TScheduleKind {
   _id: string,
   name: string,
-  avatar: string,
+  avatar?: string,
   created_at?: string,
   updated_at?: string,
   __v?: string

@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { View, StyleSheet } from 'react-native';
-
+import { PaperProvider } from 'react-native-paper';
 import { useAppSelector, useAppDispatch } from '../redux/hook';
 import { getCalender, getScheduleKind, setDate, setPlan } from '../redux/calenderSlice';
 import { getSchedulesAPI, getScheduleKindAPI } from '../api/schedule';
+import TaskShow from '../components/taskShow';
+import TaskCreate from '../components/taskCreate';
 import OneDay from '../components/oneDay';
 import { TPlan } from '../type';
 
@@ -90,22 +92,22 @@ const Calender = () => {
             updatedAt: '',
             __v: ''
         }, {
-            _id: "2", color: 'blue', width: 4, startDate: "2010-03-02", endDate: "2010-03-15", title: "title1", demo: "This is my demo1", kind: '1', user: { id: '', username: '', email: '' },
+            _id: "2", color: 'blue', width: 4, startDate: "2010-03-02", endDate: "2010-03-15", title: "title2", demo: "This is my demo2", kind: '1', user: { id: '', username: '', email: '' },
             createdAt: '',
             updatedAt: '',
             __v: ''
         }, {
-            _id: "3", color: 'green', width: 4, startDate: "2010-03-25", endDate: "2010-04-16", title: "title1", demo: "This is my demo1", kind: '1', user: { id: '', username: '', email: '' },
+            _id: "3", color: 'green', width: 4, startDate: "2010-03-25", endDate: "2010-04-16", title: "title3", demo: "This is my demo3", kind: '2', user: { id: '', username: '', email: '' },
             createdAt: '',
             updatedAt: '',
             __v: ''
         }, {
-            _id: "4", color: 'cyan', width: 4, startDate: "2010-03-02", endDate: "2010-03-22", title: "title1", demo: "This is my demo1", kind: '1', user: { id: '', username: '', email: '' },
+            _id: "4", color: 'cyan', width: 4, startDate: "2010-03-02", endDate: "2010-03-22", title: "title4", demo: "This is my demo4", kind: '3', user: { id: '', username: '', email: '' },
             createdAt: '',
             updatedAt: '',
             __v: ''
         }, {
-            _id: "5", color: 'magenta', width: 4, startDate: "2010-03-16", endDate: "2010-03-22", title: "title1", demo: "This is my demo1", kind: '1', user: { id: '', username: '', email: '' },
+            _id: "5", color: 'magenta', width: 4, startDate: "2010-03-16", endDate: "2010-03-22", title: "title5", demo: "This is my demo5", kind: '1', user: { id: '', username: '', email: '' },
             createdAt: '',
             updatedAt: '',
             __v: ''
@@ -124,14 +126,19 @@ const Calender = () => {
             dispatch(getScheduleKind(scheduleKind.data));
         })
     }, [])
+
     return (
-        <>
-            <View style={styles.app}>
-                <View style={styles.container}>
-                    <DatesOfMonth startDate={startDate} date={date} endDate={endDate} kind={kind} plan={calender_data.plan} />
+        <View style={{ flex: 1, width: '100%' }}>
+            <PaperProvider>
+                <View style={styles.app}>
+                    <View style={styles.container}>
+                        <DatesOfMonth startDate={startDate} date={date} endDate={endDate} kind={kind} plan={calender_data.plan} />
+                    </View>
                 </View>
-            </View>
-        </>
+                <TaskShow />
+                <TaskCreate />
+            </PaperProvider>
+        </View >
     )
 }
 

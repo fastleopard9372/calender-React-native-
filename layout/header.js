@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, IconButton, PaperProvider, Menu, Divider } from "react-native-paper";
+import { Button, IconButton, PaperProvider, Menu } from "react-native-paper";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import moment from "moment";
 import { useAppSelector, useAppDispatch } from "../redux/hook";
@@ -58,7 +58,7 @@ const App = () => {
 			<View style={styles.header}>
 				<PaperProvider>
 					<View style={styles.appMenu}>
-						<IconButton icon="plus" mode="contained" size={20} onPress={() => console.log("Pressed")} />
+						<IconButton icon="plus" mode="contained" size={20} onPress={handleDialogOpen} />
 						<Button mode="elevated" onPress={handleClickToday}>
 							Today
 						</Button>
