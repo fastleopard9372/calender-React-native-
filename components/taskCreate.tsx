@@ -37,13 +37,13 @@ const TaskCreate = () => {
             })
             return
         }
-        if (data?.kind == "-1" || data?.kind == "") {
-            setError({
-                message: "Kind must be selected",
-                open: true
-            })
-            return
-        }
+        // if (data?.kind == "-1" || data?.kind == "") {
+        //     setError({
+        //         message: "Kind must be selected",
+        //         open: true
+        //     })
+        //     return
+        // }
         if (data?.title == "") {
             setError({
                 message: "Title must be required",
@@ -162,13 +162,26 @@ const TaskCreate = () => {
                                     onChangeText={(text) => handleInputChange("title", text)}
                                 />
                             </View>
-                            <View style={{ flexDirection: 'row', gap: 10 }}>
+
+                            <View style={{ flexGrow: 1 }}>
+                                <Text style={styles.title_1}>Demo</Text>
+                                <TextInput
+                                    mode='outlined'
+                                    multiline={true}
+                                    value={data?.demo}
+                                    onChangeText={(text) => handleInputChange("demo", text)}
+                                    style={{
+                                        flex: 1
+                                    }}
+                                />
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
                                 <View >
                                     <Text style={styles.title_1}>Line Color</Text>
                                     <View>
                                         <View style={{ gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                             <Surface style={{
-                                                width: 150,
+                                                width: 100,
                                                 height: 40,
                                                 borderRadius: 5,
                                                 backgroundColor: MD3Colors.primary90,
@@ -204,7 +217,31 @@ const TaskCreate = () => {
                                         </View>
                                     </View>
                                 </View>
-                                <View style={{
+                                <View>
+                                    <Text style={styles.title_1}>Date</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Button mode='contained-tonal' onPress={() =>
+                                            setShowCalenderS(true)
+                                        }>{moment(data?.startDate).format("YYYY-MM-DD")}</Button>
+                                        <Text> ~ </Text>
+                                        <Button mode='contained-tonal' onPress={() =>
+                                            setShowCalenderE(true)
+                                        }>{moment(data?.endDate).format("YYYY-MM-DD")}</Button>
+                                    </View>
+                                    {showCalenderS && <RNDateTimePicker
+                                        value={moment(data?.startDate).toDate()}
+                                        mode='date'
+                                        onChange={(event: any, date: Date) => handleStartDateChange(moment(date))}
+                                    />}
+
+                                    {showCalenderE && <RNDateTimePicker
+                                        value={moment(data?.endDate).toDate()}
+                                        mode='date'
+                                        minimumDate={moment(data?.startDate).toDate()}
+                                        onChange={(event: any, date: Date) => handleEndDateChange(moment(date))}
+                                    />}
+                                </View>
+                                {/* <View style={{
                                     width: 150
                                 }}>
                                     <Text style={styles.title_1}>Kind</Text>
@@ -227,42 +264,8 @@ const TaskCreate = () => {
 
                                         defaultOption={current_kindSch}
                                     />
-                                </View>
+                                </View> */}
                             </View>
-                            <View>
-                                <Text style={styles.title_1}>Demo</Text>
-                                <TextInput
-                                    mode='outlined'
-                                    multiline={true}
-                                    value={data?.demo}
-                                    onChangeText={(text) => handleInputChange("demo", text)}
-                                    style={{
-                                        minHeight: 400
-                                    }}
-                                />
-                            </View>
-                            <Text style={styles.title_1}>Date</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Button mode='contained-tonal' onPress={() =>
-                                    setShowCalenderS(true)
-                                }>{moment(data?.startDate).format("YYYY-MM-DD")}</Button>
-                                <Text> ~ </Text>
-                                <Button mode='contained-tonal' onPress={() =>
-                                    setShowCalenderE(true)
-                                }>{moment(data?.endDate).format("YYYY-MM-DD")}</Button>
-                            </View>
-                            {showCalenderS && <RNDateTimePicker
-                                value={moment(data?.startDate).toDate()}
-                                mode='date'
-                                onChange={(event: any, date: Date) => handleStartDateChange(moment(date))}
-                            />}
-
-                            {showCalenderE && <RNDateTimePicker
-                                value={moment(data?.endDate).toDate()}
-                                mode='date'
-                                minimumDate={moment(data?.startDate).toDate()}
-                                onChange={(event: any, date: Date) => handleEndDateChange(moment(date))}
-                            />}
                             <Button mode="contained" onPress={handleSubmit} style={{ marginTop: 20 }}>
                                 Submit
                             </Button>

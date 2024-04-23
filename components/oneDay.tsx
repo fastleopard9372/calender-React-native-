@@ -140,6 +140,7 @@ const OneDay = (prop: TOneDay) => {
     const kind = useAppSelector(getCalender).kind;
     const { no, month, datesCnt, plan, width, color } = prop;
     const date = moment(prop.date);
+    const sel_date = useAppSelector(getCalender).date;
     const handleShowModal = () => {
         dispatch(setIsTaskShowShowDialog(true));
         dispatch(setDate(date.format("YYYY-MM-DD")));
@@ -388,10 +389,34 @@ const OneDay = (prop: TOneDay) => {
     let buttonBorderColor: any = "gray";
     if (date.month() === month) buttonBorderColor = 'indigo'
     if (planDay) buttonBorderColor = "red"
+    if (sel_date == prop.date) buttonBorderColor = 'cyan'
+
+    if (kind == "week") {
+        if (date.clone().endOf('week').isSame(date, 'day')) {
+            // style.container.borderRightWidth = 1
+        }
+    }
+
     if (date.isSame(moment(), 'day')) {
         dateColor = 'coral';
     }
 
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            borderWidth: 0,
+            flexDirection: 'row',
+            position: 'relative',
+            overflow: 'hidden',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '14.285%',
+            height: '100%',
+            borderRightColor: 'gray',
+            borderStyle: 'dashed',
+            borderRightWidth: kind == "week" && date.clone().endOf('week').isSame(date, 'day') ? 1 : 0
+        },
+    });
     return (
         <View style={styles.container} >
             <View style={{
@@ -453,16 +478,3 @@ const OneDay = (prop: TOneDay) => {
 
 export default OneDay
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        borderWidth: 0,
-        flexDirection: 'row',
-        position: 'relative',
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '14.285%',
-        height: '100%',
-    },
-});

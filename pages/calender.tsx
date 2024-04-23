@@ -66,7 +66,7 @@ const DatesOfMonth = (
             inner_item.push(<OneDay key={i} {
                 ...{
                     no: i,
-                    date: date.clone().add(i, "days").format("YYYY-MM-DD"),
+                    date: date.clone().add(i - 3, "days").format("YYYY-MM-DD"),
                     month: date.clone().month(),
                     datesCnt: 7,
                     width: 4,
@@ -131,7 +131,13 @@ const Calender = () => {
         <View style={{ flex: 1, width: '100%' }}>
             <PaperProvider>
                 <View style={styles.app}>
-                    <View style={styles.container}>
+                    <View style={{
+                        height: kind === 'week' ? 100 : '100%',
+                        backgroundColor: "#fff",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingHorizontal: 10,
+                    }}>
                         <DatesOfMonth startDate={startDate} date={date} endDate={endDate} kind={kind} plan={calender_data.plan} />
                     </View>
                 </View>
@@ -145,18 +151,11 @@ const Calender = () => {
 export default Calender
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-        paddingHorizontal: 10,
-    },
     app: {
         flex: 1,
         backgroundColor: "#fff",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
     },
     row: {
         flex: 1,

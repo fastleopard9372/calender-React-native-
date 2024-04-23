@@ -127,7 +127,7 @@ const TaskShow = () => {
                                 }}>
                                     {data == undefined && <Text variant="titleLarge" style={styles.title}>There is no schedule to display</Text>}
                                     <Text variant="titleLarge">{data?.title}</Text>
-                                    {kind !== "-1" && <Badge style={{ paddingHorizontal: 10 }}>{kind}</Badge>}
+                                    {/* {kind !== "-1" && <Badge style={{ paddingHorizontal: 10 }}>{kind}</Badge>} */}
                                 </View>
                                 {data &&
                                     <View style={{

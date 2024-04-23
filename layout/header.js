@@ -23,8 +23,10 @@ const App = () => {
 	const [showCalender, setShowCalender] = useState(false);
 	const dispatch = useAppDispatch();
 	const date = moment(useAppSelector(getCalender).date);
+	const showKind = useAppSelector(getCalender).kind;
 	const handleClickMonth = (kind, value) => {
-		dispatch(setDate(date.clone().add(value, kind).format("20YY-MM-DD")));
+		if (showKind == "week") dispatch(setDate(date.clone().add(value, "weeks").format("20YY-MM-DD")));
+		else dispatch(setDate(date.clone().add(value, "months").format("20YY-MM-DD")));
 	};
 	const handleClickMonthD = (value) => {
 		dispatch(setDate(date.clone().month(value).format("20YY-MM-DD")));
