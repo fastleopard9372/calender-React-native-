@@ -39,6 +39,7 @@ const App = () => {
 	};
 	const handleClickKind = (m_kind) => {
 		dispatch(setKind(m_kind));
+		closeMenu();
 	};
 	const handleDateChange = (date) => {
 		setShowCalender(false);

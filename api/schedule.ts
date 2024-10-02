@@ -11,8 +11,8 @@ export const addScheduleAPI = (data: TPlan) => {
         endDate: data.endDate,
         width: data.width,
         color: data.color,
-        kind: data.kind,
-        user: data.user.username
+        //kind: data.kind,
+        //user: data.user.username
     })
 }
 export const getSchedulesAPI = ({ startDate, endDate }: { startDate: moment.Moment, endDate: moment.Moment }) => {
