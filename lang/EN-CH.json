@@ -1,0 +1,830 @@
+{
+    "header":{
+        "menu":{
+            "sign-out":[
+                "Sign Out",
+                "登出"
+            ]
+        },
+        "nav-bar":{
+            "calendar":[
+                "Calendar",
+                "日历"
+            ],
+            "note":[
+                "Note",
+                "记录"
+            ],
+            "schedule":[
+                "Schedule",
+                "日程"
+            ],
+            "task":[
+                "TodoList",
+                "待办事项列表"
+            ],
+            "workspace":[
+                "WorkSpace",
+                "工作区"
+            ],
+            "library":[
+                "Library",
+                "图书馆"
+            ]
+        }
+    },
+    "sign-up":{
+        "title-p":[
+            "Sign Up",
+            "登记"
+        ],
+        "first-name-label":[
+            "First Name",
+            "名"
+        ],
+        "last-name-label":[
+            "Last Name",
+            "姓"
+        ],
+        "email-label":[
+            "Email",
+            "Email"
+        ],
+        "password-label":[
+            "Password",
+            "密码"
+        ],
+        "text1-p":[
+            "Already have an account?",
+            "已有账户？"
+        ],
+        "link":{
+            "sign-in":[
+                "Sign In",
+                "登入"
+            ]
+        },
+        "button":{
+            "sign-up":[
+                "Sign Up",
+                "登记"
+            ]
+        }
+    },
+    "sign-in":{
+        "title-p":[
+            "Sign In",
+            "登入"
+        ],
+        "email-label":[
+            "Email",
+            "Email"
+        ],
+        "password-label":[
+            "Password",
+            "密码"
+        ],
+        "text1-p":[
+            "Don't have an account?",
+            "沒有帳戶？"
+        ],
+        "link":{
+            "sign-up":[
+                "Sign Up",
+                "登记"
+            ]
+        },
+        "button":{
+            "sign-in":[
+                "Sign In",
+                "登录"
+            ]
+        }
+    },
+    "workspace":{
+        "table":{
+            "header":{
+                "no":[
+                    "No",
+                    "No"
+                ],
+                "title":[
+                    "Title",
+                    "称号"
+                ],
+                "note":[
+                    "Note",
+                    "笔记"
+                ],
+                "schedule":[
+                    "Schedule",
+                    "日程"
+                ],
+                "todolist":[
+                    "TodoList",
+                    "待办事项列表"
+                ],
+                "create-at":[
+                    "Created At",
+                    "创建于"
+                ],
+                "type":[
+                    "Type",
+                    "类型"
+                ],
+                "action":[
+                    "Action",
+                    "行动"
+                ]
+            },
+            "type":{
+                "owner":[
+                    "Owner",
+                    "所有者"
+                ],
+                "invited":[
+                    "Invited",
+                    "受邀"
+                ]
+            },
+            "tooltip":{
+                "invite":[
+                    "Invite",
+                    "邀请"
+                ],
+                "edit":[
+                    "Edit",
+                    "编辑"
+                ],
+                "remove":[
+                    "Remove",
+                    "消除"
+                ]
+            }
+        },
+        "new-btn":[
+            "New",
+            "新工作区"
+        ],
+        "side-bar":{
+            "note":{
+                "tab":[
+                    "Note",
+                    "笔记"
+                ],
+                "new-btn":[
+                    "New",
+                    "新"
+                ]
+            },
+            "schedule":{
+                "tab":[
+                    "Schedule",
+                    "日程"
+                ],
+                "new-btn":[
+                    "New",
+                    "新"
+                ]
+            },
+            "todolist":{
+                "tab":[
+                    "TodoList",
+                    "待办事项列表"
+                ],
+                "new-btn":[
+                    "New",
+                    "新"
+                ]
+            },
+            "member":{
+                "tab":[
+                    "Members",
+                    "成员"
+                ],
+                "invite-btn":[
+                    "invite",
+                    "邀请"
+                ]
+            }
+        }
+    },
+    "side-bar":{
+        "note":{
+            "tab":[
+                "Note",
+                "笔记"
+            ],
+            "new-btn":[
+                "New",
+                "新"
+            ],
+            "personal-note-p":[
+                "Personal Notes",
+                "个人笔记"
+            ],
+            "workspace-note-p":[
+                "WorkSpace Notes",
+                "工作区备注"
+            ]
+        },
+        "schedule":{
+            "tab":[
+                "Schedule",
+                "日程"
+            ],
+            "new-btn":[
+                "New",
+                "新"
+            ],
+            "personal-schedule-p":[
+                "Personal Schedule",
+                "个人日程"
+            ],
+            "workspace-schedule-p":[
+                "WorkSpace Schedule",
+                "工作空间安排"
+            ]
+        },
+        "todolist":{
+            "tab":[
+                "TodoList",
+                "待办事项列表"
+            ],
+            "new-btn":[
+                "New",
+                "新"
+            ],
+            "personal-todolist-p":[
+                "Personal TodoList",
+                "个人待办事项列表"
+            ],
+            "workspace-todolist-p":[
+                "WorkSpace TodoList",
+                "工作空间待办事项列表"
+            ]
+        }
+    },
+    "toast":{
+        "schedule":{
+            "create-success":[
+                "The event is added successfully.",
+                "活动添加成功。"
+            ],
+            "update-success":[
+                "The event is updated successfully.",
+                "活动更新成功。"
+            ],
+            "remove-success":[
+                "The event is removed successfully.",
+                "事件已成功删除。"
+            ]
+        },
+        "note":{
+            "create-success":[
+                "The note is added successfully.",
+                "注释已成功添加。"
+            ],
+            "update-success":[
+                "The note is updated successfully.",
+                "注释已成功更新。"
+            ],
+            "remove-success":[
+                "The note is removed successfully.",
+                "注释已成功删除。"
+            ],
+            "empty-title":[
+                "The title is empty.",
+                "标题为空。"
+            ],
+            "empty-content":[
+                "The content is empty",
+                "内容为空。"
+            ]
+        },
+        "todolist":{
+            "create-success":[
+                "The task is added successfully.",
+                "任务添加成功。"
+            ],
+            "update-success":[
+                "The task is updated successfully.",
+                "任务更新成功。"
+            ],
+            "remove-success":[
+                "The task is removed successfully.",
+                "任务已成功删除。"
+            ]
+        },
+        "workspace":{
+            "create-success":[
+                "The workspace is created successfully.",
+                "工作区创建成功。"
+            ],
+            "update-success":[
+                "The workspace is updated successfully.",
+                "工作区已成功更新。"
+            ],
+            "remove-success":[
+                "The workspace is removed successfully.",
+                "工作区已成功删除。"
+            ]
+        },
+        "sign-up":{
+            "duplicate-email":[
+                "Email already is registered",
+                "Email 已经注册。"
+            ],
+            "sign-up-success":[
+                "Account is registered successfully.",
+                "账户注册成功。"
+            ]
+        },
+        "sign-in":{
+            "incorrect-credential":[
+                "Email or Password is wrong.",
+                "Email 或密码错误。"
+            ]
+        },
+        "common":{
+            "token-expired":[
+                "Please sign in again.",
+                "请重新登录。"
+            ]
+        },
+        "invite":{
+            "invite-success":[
+                "Invited successfully.",
+                "邀请成功。"
+            ],
+            "remove-invite-success":[
+                "Removed invitation successfully.",
+                "已成功删除邀请。"
+            ],
+            "already-invited":[
+                "Already invited",
+                "已受邀。"
+            ],
+            "no-user":[
+                "Email is not registered.",
+                "EMAIL 未注册。"
+            ],
+            "no-workspace":[
+                "Workspace does't exist.",
+                "工作区不存在。"
+            ],
+            "owner":[
+                "You are owner of the workspace.",
+                "您是该工作区的所有者。"
+            ]
+        },
+        "library":{
+            "upload-succes":[
+                "Upload is success.",
+                "上傳成功。"
+            ]
+        }
+    },
+    "modal":{
+        "note":{
+            "title-d":{
+                "create":[
+                    "New Note",
+                    "新笔记"
+                ],
+                "update":[
+                    "Edit Note",
+                    "編輯註釋"
+                ]
+            },
+            "title-p":[
+                "Title",
+                "标题"
+            ],
+            "title-textfield-holder":[
+                "Title",
+                "标题"
+            ],
+            "content-p":[
+                "Content",
+                "内容"
+            ],
+            "content-textarea-holder":[
+               "Content",
+                "内容"
+            ],
+            "button":{
+                "submit":[
+                    "Submit",
+                    "提交"
+                ],
+                "close":[
+                    "Close",
+                    "关闭"
+                ]
+            }
+        },
+        "schedule":{
+            "title-d":{
+                "create":[
+                    "New Event",
+                    "新活动"
+                ],
+                "update":[
+                    "Edit Event",
+                    "編輯事件"
+                ]
+            },
+            "start-date-p":[
+                "Start Date",
+                "开始日期"
+            ],
+            "end-date-p":[
+                "End Date",
+                "结束日期"
+            ],
+            "type-p":[
+                "Type",
+                "类型"
+            ],
+            "title-p":[
+                "Title",
+                "标题"
+            ],
+            "title-textfield-holder":[
+                "Title",
+                "标题"
+            ],
+            "description-p":[
+                "Description",
+                "描述"
+            ],
+            "description-textarea-holder":[
+                "Description",
+                "描述"
+            ],
+            "color-bar-p":[
+                "Line Color",
+                "线条颜色"
+            ],
+            "width-bar-p":[
+                "Line Thickness",
+                "线的粗细"
+            ],
+            "button":{
+                "submit":[
+                    "Submit",
+                    "提交"
+                ],
+                "close":[
+                    "Close",
+                    "关闭"
+                ]
+            },
+            "types":{
+                "meeting":[
+                    "Meeting",
+                    "会议"
+                ],
+                "birthday":[
+                    "Birthday",
+                    "生日"
+                ],
+                "work":[
+                    "Work",
+                    "工作"
+                ],
+                "holiday":[
+                    "Holiday",
+                    "假期"
+                ],
+                "travel":[
+                    "Travel",
+                    "旅行"
+                ],
+                "memory":[
+                    "Memory",
+                    "记忆"
+                ],
+                "date":[
+                    "Date",
+                    "约会"
+                ]
+            }
+        },
+        "todolist":{
+            "title-d":{
+                "create":[
+                    "New Task",
+                    "新任务"
+                ],
+                "update":[
+                    "Edit Task",
+                    "编辑任务"
+                ]
+            },
+            "title-p":[
+                "Title",
+                "标题"
+            ],
+            "title-textfield-holder":[
+                "Title",
+                "标题"
+            ],
+            "description-p":[
+                "Description",
+                "描述"
+            ],
+            "description-textarea-holder":[
+                "Description",
+                "描述"
+            ],
+            "due-date-p":[
+                "Due Date",
+                "到期日"
+            ],
+            "start-time-p":[
+                "Start Time",
+                "开始时间"
+            ],
+            "end-time-p":[
+                "End Time",
+                "结束时间"
+            ],
+            "button":{
+                "submit":[
+                    "Submit",
+                    "提交"
+                ],
+                "close":[
+                    "Close",
+                    "关闭"
+                ]
+            }
+        },
+        "workspace":{
+            "title-d":{
+                "create":[
+                    "New WorkSpace",
+                    "新工作区"
+                ],
+                "update":[
+                    "Edit WorkSpace",
+                    "编辑工作区"
+                ]
+            },
+            "title-label":[
+                "Title",
+                "标题"
+            ],
+            "title-textfield-holder":[
+                "Title",
+                "标题"
+            ],
+            "description-label":[
+                "Description",
+                "描述"
+            ],
+            "description-textarea-holder":[
+                "Description",
+                "描述"
+            ],
+            "button":{
+                "submit":[
+                    "Submit",
+                    "提交"
+                ],
+                "close":[
+                    "Close",
+                    "关闭"
+                ]
+            }
+        },
+        "inivte":{
+            "title-d":[
+                "Invite People to WorkSpace",
+                "邀请人们加入工作区"
+            ],
+            "button":{
+                "submit":[
+                    "Submit",
+                    "提交"
+                ],
+                "close":[
+                    "Close",
+                    "关闭"
+                ]
+            }
+        }
+    },
+    "error":{
+        "schedule":{
+            "modal":{
+                "empty-title":[
+                    "The title is empty.",
+                    "标题为空。"
+                ],
+                "empty-content":[
+                    "The description is empty.",
+                    "描述为空。"
+                ],
+                "invalid-end-date":[
+                    "The end date must be after the start date.",
+                    "结束日期必须晚于开始日期。"
+                ]
+            }
+        },
+        "note":{
+            "modal":{
+                "empty-title":[
+                    "The title is empty.",
+                    "标题为空。"
+                ],
+                "empty-content":[
+                    "The content is empty",
+                    "内容为空。"
+                ]
+            }
+        },
+        "todolist":{
+            "modal":{
+                "empty-title":[
+                    "The title is empty.",
+                    "标题为空。"
+                ],
+                "empty-description":[
+                    "The description is empty",
+                    "描述为空。"
+                ],
+                "empty-starttime":[
+                    "The start time is empty",
+                    "开始时间为空。"
+                ],
+                "empty-endtime":[
+                    "The end time is empty",
+                    "结束时间为空。"
+                ],
+                "invalid-endtime":[
+                    "The end time must be after the start time",
+                    "结束时间必须晚于开始时间。"
+                ]
+            }
+        },
+        "workspace":{
+            "empty-title":[
+                "The title is empty.",
+                "标题为空。"
+            ],
+            "empty-description":[
+                "The description is empty",
+                "描述为空。"
+            ],
+            "invite":{
+                "invalid-email":[
+                    "Email is invalid.",
+                    "Email 无效。"
+                ]
+            }
+        },
+        "sign-up":{
+            "empty-firstname":[
+                "The first name is empty.",
+                "名字为空。"
+            ],
+            "empty-lastname":[
+                "The last name is empty.",
+                "姓氏为空。"
+            ],
+            "empty-email":[
+                "Email is empty.",
+                "Email 为空。"
+            ],
+            "empty-password":[
+                "The password is empty",
+                "密码为空。"
+            ],
+            "invalid-short-password":[
+                "The password must be more than 6 letters.",
+                "密码必须超过6个字母。"
+            ],
+            "invalid-email":[
+                "Email is invalid.",
+                "Email 无效。"
+            ]
+        },
+        "sign-in":{
+
+        }
+    },
+    "calendar":{
+        "toolbar":{
+            "view-mode":{
+                "title":["View Mode","查看模式"],
+                "month1":[
+                    "Month 1",
+                    "月视图 1"
+                ],
+                "month2":[
+                    "Month 2",
+                    "月视图 2"
+                ],
+                "week":[
+                    "Week",
+                    "周视图"
+                ]
+            },
+            "button":{
+                "today":[
+                    "Today",
+                    "今天"
+                ]
+            }
+        }
+    },
+    "library":{
+        "tabs-bar":{
+            "tabs":{
+                "all":[
+                    "All",
+                    "鋁"
+                ],
+                "media":[
+                    "Media",
+                    "媒體"
+                ],
+                "doc":[
+                    "Docs",
+                    "文件"
+                ]
+            },
+            "toolbar":{
+                "element":[
+                    "element",
+                    "元素"
+                ]
+        }
+        },
+        "preview-bar":{
+            "toolbar":{
+                "openfileBtn":[
+                    "Open File",
+                    "開啟文件"
+                ]
+            },
+            "no-preview":{
+                "heading":[
+                    "Couldn't preview file",
+                    "無法預覽文件。"
+                ],
+                "description":[
+                    "Preview is not currently supported on this file type",
+                    "此文件類型目前不支援預覽。"
+                ],
+                "downloadBtn":[
+                    "Download",
+                    "下載"
+                ]
+            }
+        }
+    },
+    "note":{
+        "tabs-bar":{
+            "tabs":{
+                "person":[
+                    "Personal",
+                    "個人的"
+                ],
+                "workspace":[
+                    "WorkSpace",
+                    "工作区"
+                ]
+            }
+        },
+        "edit-bar":{
+            "btn":{
+                "save":[
+                    "Save",
+                    "節省"
+                ],
+                "new":[
+                    "New",
+                    "新"
+                ]
+            },
+            "dropdown-list":{
+                "new":[
+                    "New",
+                    "新"
+                ],
+                "save":[
+                    "Save",
+                    "節省"
+                ],
+                "remove":[
+                    "Remove",
+                    "消除"
+                ]
+            }
+        }
+    }
+}

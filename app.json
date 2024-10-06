@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Calendar",
-    "slug": "Calendar",
+    "name": "Calender",
+    "slug": "Calender",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ]
   },
-  "name": "Calendar"
+  "name": "Calender"
 }
