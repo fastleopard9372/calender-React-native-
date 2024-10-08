@@ -1,18 +1,18 @@
 import React from "react";
 import { View, Text } from "react-native";
 import ScreenWrapper from "../components/common/screenWrapper";
-const Workspace = () => {
+const Note = () => {
     return (
         <View>
-            <Text>Workspace</Text>
+            <Text>Note</Text>
         </View>
     );
 };
-const WorkspaceScreen = (props) => {
+const NoteScreen = (props) => {
     return (
         <ScreenWrapper {...props}>
-            <Workspace />
+            <Note />
         </ScreenWrapper>
     );
 };
-export default WorkspaceScreen;
+export default NoteScreen;

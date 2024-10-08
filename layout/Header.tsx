@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, IconButton, Appbar, PaperProvider, Menu, Avatar } from "react-native-paper";
+import { Button, Appbar, Text, Avatar } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import moment from "moment";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -38,14 +38,14 @@ const Header = (props) => {
     const openMenuKind = () => setVisible({ year: false, month: false, kind_flag: true });
     const closeMenu = () => setVisible({ year: false, month: false, kind_flag: false });
     return (
-        <PaperProvider>
-            <Appbar.Header style={styles.app}>
-                <Appbar.Action
-                    icon="menu"
-                    onPress={() => {
-                        props.handleDrawer();
-                    }}
-                />
+        <Appbar.Header style={styles.app}>
+            <Appbar.Action
+                icon="menu"
+                onPress={() => {
+                    props.handleDrawer();
+                }}
+            />
+            {props.route.name == "Calender" ? (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Button mode="elevated" onPress={handleClickToday}>
                         {ENCHINTL["calendar"]["toolbar"]["button"]["today"][intl]}
@@ -64,12 +64,14 @@ const Header = (props) => {
                     )}
                     <Appbar.Action icon="arrow-right" onPress={() => handleClickMonth("months", 1)} />
                 </View>
-                <Avatar.Text
-                    size={40}
-                    label={user.firstName.toLocaleUpperCase().trim()[0] + user.lastName.toLocaleUpperCase().trim()[0]}
-                />
-            </Appbar.Header>
-        </PaperProvider>
+            ) : (
+                <Text variant="headlineMedium">{props.route.name}</Text>
+            )}
+            <Avatar.Text
+                size={40}
+                label={user?.firstName?.toLocaleUpperCase().trim()[0] + user?.lastName?.toLocaleUpperCase().trim()[0]}
+            />
+        </Appbar.Header>
     );
 };
 const styles = StyleSheet.create({

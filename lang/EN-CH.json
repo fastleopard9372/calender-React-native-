@@ -278,7 +278,14 @@
             "remove-success":[
                 "The event is removed successfully.",
                 "事件已成功删除。"
-            ]
+            ],
+            "confirm":[
+                "Are you sure to delete this schedule?",
+                "您确定要删除这个日程安排吗？"
+            ],
+            "yes":["Yes","是"],
+            "no":["No","否"],
+            "no-list":["There is no schedule to display","没有可显示的时间表"]
         },
         "note":{
             "create-success":[
@@ -467,9 +474,17 @@
                 "Line Color",
                 "线条颜色"
             ],
+            "bar-setting":[
+                "Line Setting",
+                "线条设置"
+            ],
             "width-bar-p":[
                 "Line Thickness",
                 "线的粗细"
+            ],
+            "date":[
+                "Date",
+                "日期"
             ],
             "button":{
                 "submit":[
@@ -550,6 +565,10 @@
             "end-time-p":[
                 "End Time",
                 "结束时间"
+            ],
+            "time-p":[
+                "Time",
+                "时间"
             ],
             "button":{
                 "submit":[

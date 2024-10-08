@@ -4,13 +4,14 @@ export interface ScheduleDTO {
     description: string;
     startDate: string;
     endDate: string;
-    color: string;
-    width: number;
+    color: string | "indigo";
+    width: number | 4;
     type: string;
     ownerId?: number;
     workspaceId?: number;
+    createAt?: string;
+    updateAt?: string;
 }
-
 export interface NewScheduleDTO {
     title: string;
     description: string;

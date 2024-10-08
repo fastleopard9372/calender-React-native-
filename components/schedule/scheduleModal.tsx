@@ -12,20 +12,28 @@ import {
     TextInput,
     MD3Colors,
     TouchableRipple,
-    Icon,
+    Appbar,
 } from "react-native-paper";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { updateScheduleAPI, addScheduleAPI } from "../api/schedule";
+import { Toast } from "toastify-react-native";
+import { AxiosResponse, AxiosError } from "axios";
+import { createSchedule as createScheduleApi, updateSchedule as updateScheduleApi } from "../../api";
 import ColorIcon from "./colorIcon";
 import LineThickness from "./lineThickness";
-import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { getCalender, setDate, updatePlan, addPlan, setIsShowDialog } from "../redux/calenderSlice";
-import { TPlan, TScheduleKind } from "../type/calender";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { refresh, getCalender, setIsShowDialog } from "../../redux/calenderSlice";
+import { getData } from "../../redux/authSlice";
+import ENCHINTL from "../../lang/EN-CH.json";
+import { TScheduleKind } from "../../type/calender";
+import { ScheduleDTO, NewScheduleDTO, UpdateScheduleDTO } from "../../type/schedule.dto";
 
-const TaskCreate = () => {
+const ScheduleModal = ({ workspaceId }: { workspaceId?: number }) => {
     const dispatch = useAppDispatch();
-    const { isShowDialog, scheduleKind, colors, thickness, newPlan, action } = useAppSelector(getCalender);
-    const [data, setData] = useState<TPlan>(newPlan);
+    const intl = useAppSelector(getData).language;
+    const kind = useAppSelector(getCalender).kind;
+    const token = useAppSelector(getData).accessToken;
+    const { isShowDialog, scheduleKind, colors, thickness, newSchedule, action } = useAppSelector(getCalender);
+    const [data, setData] = useState<ScheduleDTO>(newSchedule);
     const [visibleLine, setVisibleLine] = React.useState(false);
     const [showCalenderS, setShowCalenderS] = useState(false);
     const [showCalenderE, setShowCalenderE] = useState(false);
@@ -39,61 +47,72 @@ const TaskCreate = () => {
     const handleLineThicknessClick = (e: number) => {
         setData({ ...data, width: e });
     };
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (moment(data?.endDate).isBefore(data?.startDate)) {
             setError({
-                message: "End date must be after start date",
+                message: ENCHINTL["error"]["schedule"]["modal"]["invalid-end-date"][intl],
                 open: true,
             });
             return;
         }
-        // if (data?.kind == "-1" || data?.kind == "") {
-        //     setError({
-        //         message: "Kind must be selected",
-        //         open: true
-        //     })
-        //     return
-        // }
         if (data?.title == "") {
             setError({
-                message: "Title must be required",
+                message: ENCHINTL["error"]["schedule"]["modal"]["empty-title"][intl],
                 open: true,
             });
             return;
         }
-        if (data?.demo == "") {
+        if (data?.description == "") {
             setError({
-                message: "Demo must be required",
+                message: ENCHINTL["error"]["schedule"]["modal"]["empty-content"][intl],
                 open: true,
             });
             return;
         }
         if (action == "Edit") {
-            updateScheduleAPI(data)
-                .then((schedule) => {
-                    dispatch(updatePlan(schedule.data));
-                    dispatch(setIsShowDialog(!isShowDialog));
-                    // toast.info("Plan is updated");
-                })
-                .catch((error) => {
-                    setError({
-                        message: "Server Error.",
-                        open: true,
-                    });
-                });
+            let payload: UpdateScheduleDTO = {
+                title: data.title,
+                description: data.description,
+                startDate: data.startDate,
+                endDate: data.endDate,
+                color: data.color,
+                width: data.width,
+                type: data.type,
+            };
+            const res = await updateScheduleApi(data.id, payload, token);
+            if (res.status && res.status < 400) {
+                dispatch(setIsShowDialog(!isShowDialog));
+                dispatch(refresh());
+                Toast.success(ENCHINTL["toast"]["schedule"]["update-success"][intl]);
+            } else {
+                const err = res as AxiosError;
+                if (err.response.status == 401) {
+                    Toast.error(ENCHINTL["toast"]["common"]["token-expired"][intl]);
+                }
+            }
         } else if (action == "Create") {
-            addScheduleAPI(data)
-                .then((schedule) => {
-                    dispatch(addPlan(schedule.data));
-                    dispatch(setIsShowDialog(!isShowDialog));
-                    // toast.info("Plan is added newly");
-                })
-                .catch((error) => {
-                    setError({
-                        message: "Server Error.",
-                        open: true,
-                    });
-                });
+            let payload: NewScheduleDTO = {
+                title: data.title,
+                description: data.description,
+                color: data.color,
+                width: data.width,
+                type: data.type,
+                startDate: data.startDate,
+                endDate: data.endDate,
+            };
+            if (workspaceId != null || workspaceId !== undefined) payload.workspaceId = workspaceId;
+            const res = await createScheduleApi(payload, token);
+            if (res.status && res.status < 400) {
+                const result = res as AxiosResponse;
+                dispatch(setIsShowDialog(!isShowDialog));
+                dispatch(refresh());
+                Toast.success(ENCHINTL["toast"]["schedule"]["create-success"][intl]);
+            } else {
+                const err = res as AxiosError;
+                if (err.response.status == 401) {
+                    Toast.error(ENCHINTL["toast"]["common"]["token-expired"][intl]);
+                }
+            }
         }
     };
     const handleStartDateChange = (date: moment.Moment) => {
@@ -104,11 +123,7 @@ const TaskCreate = () => {
         setShowCalenderE(false);
         setData({ ...data, endDate: date.format("YYYY-MM-DD") });
     };
-    const handleKind = (value: string) => {
-        setData({ ...data, kind: value });
-    };
     const handleInputChange = (name: string, value: string) => {
-        console.log(name, value);
         setData({ ...data, [name]: value });
     };
     const hideModal = () => {
@@ -118,7 +133,7 @@ const TaskCreate = () => {
     const showModalLine = () => setVisibleLine(true);
     const hideModalLine = () => setVisibleLine(false);
     useEffect(() => {
-        if (data?.kind == "-1") {
+        if (data?.type == "-1") {
             setError({
                 message: "Kind must be started",
                 open: true,
@@ -126,7 +141,7 @@ const TaskCreate = () => {
         } else {
             setError({ message: "", open: false });
         }
-        if (moment(newPlan?.endDate).isBefore(moment(newPlan?.startDate))) {
+        if (moment(newSchedule?.endDate).isBefore(moment(newSchedule?.startDate))) {
             setError({
                 message: "End date must be after start date",
                 open: true,
@@ -134,10 +149,8 @@ const TaskCreate = () => {
         } else {
             setError({ message: "", open: false });
         }
-        setData(newPlan);
-    }, [newPlan]);
-    const kindSch = scheduleKind.map((v: TScheduleKind, i: number) => ({ key: v._id, value: v.name }));
-    const current_kindSch = action == "Edit" ? kindSch.find((v: any) => v.key == data?.kind) : { key: "", value: "" };
+        setData(newSchedule);
+    }, [newSchedule]);
     const containerStyle = {
         flex: 1,
         margin: 0,
@@ -147,19 +160,17 @@ const TaskCreate = () => {
             <Portal>
                 <Modal visible={isShowDialog} onDismiss={hideModalLine} contentContainerStyle={containerStyle}>
                     <Surface style={styles.containerStyle}>
-                        <SafeAreaView style={styles.safeContainerStyle}>
-                            <IconButton
-                                icon={"close-circle"}
-                                iconColor={MD3Colors.primary40}
-                                size={32}
-                                onPress={hideModal}
-                                style={{ position: "absolute", right: 10, top: 10, zIndex: 100 }}
+                        <Appbar.Header style={{ width: "100%" }}>
+                            <Appbar.BackAction onPress={hideModal} />
+                            <Appbar.Content
+                                title={`${
+                                    action == "Edit"
+                                        ? ENCHINTL["modal"]["schedule"]["title-d"]["update"][intl]
+                                        : ENCHINTL["modal"]["schedule"]["title-d"]["create"][intl]
+                                }`}
                             />
-                            <View>
-                                <Text variant="headlineLarge" style={styles.header}>
-                                    {action} Schedule
-                                </Text>
-                            </View>
+                        </Appbar.Header>
+                        <SafeAreaView style={styles.safeContainerStyle}>
                             {error.open && (
                                 <View
                                     style={{
@@ -182,7 +193,7 @@ const TaskCreate = () => {
                                 </View>
                             )}
                             <View>
-                                <Text style={styles.title_1}>Title</Text>
+                                <Text style={styles.title_1}>{ENCHINTL["modal"]["schedule"]["title-p"][intl]}</Text>
                                 <TextInput
                                     mode="outlined"
                                     value={data?.title}
@@ -191,20 +202,25 @@ const TaskCreate = () => {
                             </View>
 
                             <View style={{ flexGrow: 1 }}>
-                                <Text style={styles.title_1}>Demo</Text>
+                                <Text style={styles.title_1}>
+                                    {ENCHINTL["modal"]["schedule"]["description-p"][intl]}
+                                </Text>
                                 <TextInput
                                     mode="outlined"
                                     multiline={true}
-                                    value={data?.demo}
-                                    onChangeText={(text) => handleInputChange("demo", text)}
+                                    value={data?.description}
+                                    onChangeText={(text) => handleInputChange("description", text)}
                                     style={{
+                                        paddingTop: 8,
                                         flex: 1,
                                     }}
                                 />
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: "space-between", gap: 10 }}>
                                 <View>
-                                    <Text style={styles.title_1}>Line Color</Text>
+                                    <Text style={styles.title_1}>
+                                        {ENCHINTL["modal"]["schedule"]["bar-setting"][intl]}
+                                    </Text>
                                     <View>
                                         <View
                                             style={{
@@ -255,7 +271,9 @@ const TaskCreate = () => {
                                     </View>
                                 </View>
                                 <View>
-                                    <Text style={styles.title_1}>Date</Text>
+                                    <Text style={styles.title_1}>
+                                        {ENCHINTL["modal"]["schedule"]["width-bar-p"][intl]}
+                                    </Text>
                                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                                         <Button mode="contained-tonal" onPress={() => setShowCalenderS(true)}>
                                             {moment(data?.startDate).format("YYYY-MM-DD")}
@@ -282,33 +300,9 @@ const TaskCreate = () => {
                                         />
                                     )}
                                 </View>
-                                {/* <View style={{
-                                    width: 150
-                                }}>
-                                    <Text style={styles.title_1}>Kind</Text>
-                                    <SelectList
-                                        setSelected={(val: string) => handleKind(val)}
-                                        data={scheduleKind.map((v: TScheduleKind, i: number) =>
-                                            ({ key: v._id, value: v.name })
-                                        )}
-                                        save="key"
-                                        boxStyles={{
-                                            position: 'relative'
-                                        }}
-                                        dropdownStyles={{
-                                            top: 40,
-                                            position: 'absolute',
-                                            backgroundColor: 'white',
-                                            width: '100%',
-                                            zIndex: 100
-                                        }}
-
-                                        defaultOption={current_kindSch}
-                                    />
-                                </View> */}
                             </View>
                             <Button mode="contained" onPress={handleSubmit} style={{ marginTop: 20 }}>
-                                Submit
+                                {ENCHINTL["modal"]["schedule"]["button"]["submit"][intl]}
                             </Button>
                         </SafeAreaView>
                     </Surface>
@@ -326,7 +320,7 @@ const TaskCreate = () => {
                 >
                     <View>
                         <Text variant="headlineMedium" style={styles.header}>
-                            Line Setting
+                            {ENCHINTL["modal"]["schedule"]["bar-setting"][intl]}
                         </Text>
                     </View>
                     <IconButton
@@ -336,7 +330,7 @@ const TaskCreate = () => {
                         onPress={hideModalLine}
                         style={{ position: "absolute", right: 10, top: 10, zIndex: 100 }}
                     />
-                    <Text>Line Color</Text>
+                    <Text>{ENCHINTL["modal"]["schedule"]["color-bar-p"][intl]}</Text>
                     <View
                         style={{
                             flexDirection: "row",
@@ -350,7 +344,7 @@ const TaskCreate = () => {
                             <ColorIcon key={i} value={v} selected={v === data?.color} handleClick={handleColorClick} />
                         ))}
                     </View>
-                    <Text style={{ marginTop: 20 }}>Line Thickness</Text>
+                    <Text style={{ marginTop: 20 }}>{ENCHINTL["modal"]["schedule"]["width-bar-p"][intl]}</Text>
                     <View
                         style={{
                             flexDirection: "row",
@@ -376,7 +370,7 @@ const TaskCreate = () => {
     );
 };
 
-export default TaskCreate;
+export default ScheduleModal;
 
 const styles = StyleSheet.create({
     container: {
@@ -399,7 +393,9 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     containerStyle: {
-        flex: 1,
+        position: "absolute",
+        width: "100%",
+        height: "100%",
         justifyContent: "center",
         alignItems: "center",
     },

@@ -5,7 +5,7 @@ import { getCalender, setDate, setIsTaskShowShowDialog } from "../redux/calender
 // import TaskShow from './taskShow'
 import { View, StyleSheet } from "react-native";
 import { Text, Portal, Modal, TouchableRipple } from "react-native-paper";
-import TOneDay, { TPlan } from "../type/calender";
+import { OneDayDTO, ScheduleDTO } from "../type";
 
 const Bar = ({ color, width, position }: { color: string; position: number; width?: number }) => {
     const wid = width == undefined ? 2 : width;
@@ -23,7 +23,7 @@ const Bar = ({ color, width, position }: { color: string; position: number; widt
     );
 };
 const Conner = ({ no, width, color, position }: { no: number; width?: number; color?: string; position?: number }) => {
-    let pos = 0;
+    let pos = width;
     let col = "gray";
     let wid = 2;
     if (width) wid = width;
@@ -167,10 +167,10 @@ const Conner = ({ no, width, color, position }: { no: number; width?: number; co
     }
 };
 
-const OneDay = (prop: TOneDay) => {
+const OneDay = (prop: any) => {
     const dispatch = useAppDispatch();
     const kind = useAppSelector(getCalender).kind;
-    const { no, month, datesCnt, plan, width, color } = prop;
+    const { no, month, datesCnt, schedule, width, color } = prop;
     const date = moment(prop.date);
     const sel_date = useAppSelector(getCalender).date;
 
@@ -180,18 +180,17 @@ const OneDay = (prop: TOneDay) => {
     };
     const handleIconButton = (date: moment.Moment) => {
         dispatch(setDate(date.format("YYYY-MM-DD")));
-        // dispatch(setDateAndPlan({ date: date.format("YYYY-MM-DD"), plan }))
+        // dispatch(setDateAndSchedule({ date: date.format("YYYY-MM-DD"), schedule }))
     };
     let cornerL = null;
     let cornerR = null;
     let k = no;
     if (~~(no / 7) % 2) k = ~~(no / 7) * 7 + (6 - (no % 7));
-
     if (kind == "month_1") {
         if (no == 0) {
-            let pos = width / 2;
+            let pos = 0;
             let _pos = pos;
-            let connerPlan = plan?.map((v: TPlan) => {
+            let connerSchedule = schedule?.map((v: ScheduleDTO, i: number) => {
                 if (
                     moment(v.endDate).clone().weekday(6).isSameOrAfter(date, "day") &&
                     moment(v.endDate).isSameOrAfter(moment(v.startDate), "day")
@@ -204,7 +203,9 @@ const OneDay = (prop: TOneDay) => {
                 //   }
                 // }
                 if (date.isBetween(moment(v.startDate), moment(v.endDate), "day", "[)")) {
-                    return Conner({ no: 0, width: v.width, color: v.color, position: _pos - v.width / 2 });
+                    return (
+                        <Conner key={i} {...{ no: 0, width: v.width, color: v.color, position: _pos - v.width / 2 }} />
+                    );
                 } else return null;
             });
             cornerL = (
@@ -216,13 +217,13 @@ const OneDay = (prop: TOneDay) => {
                     }}
                 >
                     {Conner({ no: 0, width })}
-                    {connerPlan}
+                    {connerSchedule}
                 </View>
             );
         } else if (datesCnt == no + 1) {
-            let pos = width / 2;
+            let pos = 0;
             let _pos = pos;
-            let connerPlan = plan?.map((v: TPlan) => {
+            let connerSchedule = schedule?.map((v: ScheduleDTO, i: number) => {
                 // for (let j = 0; j <= i; j++) {
                 //   if (moment(a[j].endDate).clone().weekday(6).isSameOrAfter(date, 'day') && moment(a[j].endDate).isSameOrAfter(moment(v.startDate), 'day')) {
                 //     _pos += v.width;
@@ -235,7 +236,9 @@ const OneDay = (prop: TOneDay) => {
                     _pos += v.width;
                 }
                 if (date.isBetween(moment(v.startDate), moment(v.endDate), "day", "[)")) {
-                    return Conner({ no: 1, width: v.width, color: v.color, position: _pos - v.width / 2 });
+                    return (
+                        <Conner key={i} {...{ no: 1, width: v.width, color: v.color, position: _pos - v.width / 2 }} />
+                    );
                 } else return <></>;
             });
             if (~~(datesCnt / 7) % 2) {
@@ -249,7 +252,7 @@ const OneDay = (prop: TOneDay) => {
                         }}
                     >
                         {Conner({ no: 1, width })}
-                        {connerPlan}
+                        {connerSchedule}
                     </View>
                 );
             } else {
@@ -263,14 +266,14 @@ const OneDay = (prop: TOneDay) => {
                         }}
                     >
                         {Conner({ no: 2, width })}
-                        {connerPlan}
+                        {connerSchedule}
                     </View>
                 );
             }
         } else if (no % 14 == 13) {
-            let pos = width / 2;
+            let pos = 0;
             let _pos = pos;
-            let connerPlan = plan?.map((v: TPlan) => {
+            let connerSchedule = schedule?.map((v: ScheduleDTO, i: number) => {
                 // for (let j = 0; j <= i; j++) {
                 //   if (moment(a[j].endDate).clone().weekday(6).isSameOrAfter(date, 'day') && moment(a[j].endDate).isSameOrAfter(moment(v.startDate), 'day')) {
                 //     _pos += v.width;
@@ -283,12 +286,17 @@ const OneDay = (prop: TOneDay) => {
                     _pos += v.width;
                 }
                 if (date.isBetween(moment(v.startDate), moment(v.endDate), "day", "[)")) {
-                    return Conner({
-                        no: 3,
-                        width: v.width,
-                        color: v.color,
-                        position: _pos - v.width / 2,
-                    });
+                    return (
+                        <Conner
+                            key={i}
+                            {...{
+                                no: 3,
+                                width: v.width,
+                                color: v.color,
+                                position: _pos - v.width / 2,
+                            }}
+                        />
+                    );
                 } else return <></>;
             });
             cornerL = (
@@ -300,13 +308,13 @@ const OneDay = (prop: TOneDay) => {
                     }}
                 >
                     {Conner({ no: 3, width })}
-                    {connerPlan}
+                    {connerSchedule}
                 </View>
             );
         } else if (no % 14 == 0) {
-            let pos = width / 2;
+            let pos = 0;
             let _pos = pos;
-            let connerPlan = plan?.map((v: TPlan) => {
+            let connerSchedule = schedule?.map((v: ScheduleDTO) => {
                 // for (let j = 0; j <= i; j++) {
                 //   if (moment(a[j].endDate).clone().weekday(6).isSameOrAfter(date, "day") && moment(a[j].endDate).isSameOrAfter(moment(v.startDate), "day")) {
                 //     _pos += v.width;
@@ -332,13 +340,13 @@ const OneDay = (prop: TOneDay) => {
                     }}
                 >
                     {Conner({ no: 4, width })}
-                    {connerPlan}
+                    {connerSchedule}
                 </View>
             );
         } else if (no % 14 == 6) {
-            let pos = width / 2;
+            let pos = 0;
             let _pos = pos;
-            let connerPlan = plan?.map((v: TPlan) => {
+            let connerSchedule = schedule?.map((v: ScheduleDTO) => {
                 // for (let j = 0; j <= i; j++) {
                 //   if (moment(a[j].endDate).clone().weekday(6).isSameOrAfter(date, "day") && moment(a[j].endDate).isSameOrAfter(moment(v.startDate), "day")) {
                 //     _pos += v.width;
@@ -363,13 +371,13 @@ const OneDay = (prop: TOneDay) => {
                     }}
                 >
                     {Conner({ no: 5, width })}
-                    {connerPlan}
+                    {connerSchedule}
                 </View>
             );
         } else if (no % 14 == 7) {
-            let pos = width / 2;
+            let pos = 0;
             let _pos = pos;
-            let connerPlan = plan?.map((v: TPlan) => {
+            let connerSchedule = schedule?.map((v: ScheduleDTO, i: number) => {
                 // for (let j = 0; j <= i; j++) {
                 //   if (moment(a[j].endDate).clone().weekday(6).isSameOrAfter(date, "day") && moment(a[j].endDate).isSameOrAfter(moment(v.startDate), "day")) {
                 //     _pos += v.width;
@@ -382,7 +390,9 @@ const OneDay = (prop: TOneDay) => {
                     _pos += v.width;
                 }
                 if (date.isBetween(moment(v.startDate), moment(v.endDate), "day", "(]")) {
-                    return Conner({ no: 6, width: v.width, color: v.color, position: _pos - v.width / 2 });
+                    return (
+                        <Conner key={i} {...{ no: 6, width: v.width, color: v.color, position: _pos - v.width / 2 }} />
+                    );
                 } else return <></>;
             });
             cornerR = (
@@ -394,7 +404,7 @@ const OneDay = (prop: TOneDay) => {
                     }}
                 >
                     {Conner({ no: 6, width })}
-                    {connerPlan}
+                    {connerSchedule}
                 </View>
             );
         }
@@ -403,31 +413,29 @@ const OneDay = (prop: TOneDay) => {
     let pos = width == undefined ? 1 : width;
     const main_width = width == undefined ? 1 : width / 2;
 
-    let planDay = false;
-    let OnePlanDay = {
+    let scheduleDay = false;
+    let OneScheduleDay = {
         state: false,
         border: 1,
         color: "",
     };
-    let _pos = pos;
-    const planBarL = plan?.map((v: TPlan, i: number) => {
-        // for (let j = 0; j <= i; j++) {
-        //   if (moment(a[j].endDate).clone().weekday(6).isSameOrAfter(date, "day") && moment(a[j].endDate).isSameOrAfter(moment(v.startDate), "day")) {
-        //     _pos += v.width;
-        //   }
-        // }
-        if (
-            moment(v.endDate).clone().weekday(6).isSameOrAfter(date, "day") &&
-            moment(v.endDate).isSameOrAfter(moment(v.startDate), "day")
-        ) {
-            _pos += v.width;
+    let _pos = 0;
+    const scheduleBarL = schedule?.map((v: ScheduleDTO, i: number) => {
+        if (~~(no / 7) % 2 == 1) {
+            if (moment(v.endDate).clone().isAfter(date, "day")) {
+                _pos += v.width;
+            }
+        } else {
+            if (moment(v.endDate).clone().isSameOrAfter(date, "day")) {
+                _pos += v.width;
+            }
         }
         if (date.isSame(moment(v.startDate), "day") || date.isSame(moment(v.endDate), "day")) {
-            planDay = true;
+            scheduleDay = true;
         }
         if (moment(v.startDate).isSame(moment(v.endDate), "day") && date.isSame(moment(v.startDate), "day")) {
-            planDay = true;
-            OnePlanDay = {
+            scheduleDay = true;
+            OneScheduleDay = {
                 state: true,
                 border: v.width,
                 color: v.color,
@@ -436,7 +444,7 @@ const OneDay = (prop: TOneDay) => {
         }
         if (kind == "month_2") {
             if (date.isSame(moment(v.endDate), "day")) {
-                return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+                return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
             }
             if (date.isSame(moment(v.startDate), "day")) {
                 return <></>;
@@ -444,39 +452,38 @@ const OneDay = (prop: TOneDay) => {
         }
         if (~~(no / 7) % 2 == 1) {
             if (date.isSame(moment(v.startDate), "day")) {
-                return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+                return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
             }
         } else {
             if (date.isSame(moment(v.endDate), "day")) {
-                return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+                return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
             }
         }
         if (date.isBetween(moment(v.startDate), moment(v.endDate), "day")) {
-            return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+            return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
         } else {
             return null;
         }
     });
-    pos = width == undefined ? 1 : width;
+    pos = 0;
+
     _pos = pos;
-    const planBarR = plan?.map((v: TPlan) => {
-        // for (let j = 0; j <= i; j++) {
-        //   if (moment(a[j].endDate).clone().weekday(6).isSameOrAfter(date, "day") && moment(a[j].endDate).isSameOrAfter(moment(v.startDate), "day")) {
-        //     _pos += v.width;
-        //   }
-        // }
-        if (
-            moment(v.endDate).clone().weekday(6).isSameOrAfter(date, "day") &&
-            moment(v.endDate).isSameOrAfter(moment(v.startDate), "day")
-        ) {
-            _pos += v.width;
+    const scheduleBarR = schedule?.map((v: ScheduleDTO, i: number) => {
+        if (~~(no / 7) % 2 == 1) {
+            if (moment(v.endDate).clone().isSameOrAfter(date, "day")) {
+                _pos += v.width;
+            }
+        } else {
+            if (moment(v.endDate).clone().isAfter(date, "day")) {
+                _pos += v.width;
+            }
         }
         if (moment(v.startDate).isSame(moment(v.endDate), "day")) {
             return <></>;
         }
         if (kind == "month_2") {
             if (date.isSame(moment(v.startDate), "day")) {
-                return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+                return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
             }
             if (date.isSame(moment(v.endDate), "day")) {
                 return <></>;
@@ -484,15 +491,15 @@ const OneDay = (prop: TOneDay) => {
         }
         if (~~(no / 7) % 2 == 1) {
             if (date.isSame(moment(v.endDate), "day")) {
-                return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+                return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
             }
         } else {
             if (date.isSame(moment(v.startDate), "day")) {
-                return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+                return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
             }
         }
         if (date.isBetween(moment(v.startDate), moment(v.endDate), "day")) {
-            return <Bar color={v.color} position={_pos - v.width} width={v.width} />;
+            return <Bar key={i} color={v.color} position={_pos - v.width} width={v.width} />;
         } else {
             return null;
         }
@@ -500,7 +507,7 @@ const OneDay = (prop: TOneDay) => {
     let dateColor = "#f5f5f5";
     let buttonBorderColor: any = "gray";
     if (date.month() === month) buttonBorderColor = "indigo";
-    if (planDay) buttonBorderColor = "red";
+    if (scheduleDay) buttonBorderColor = "red";
     if (sel_date == prop.date) buttonBorderColor = "cyan";
 
     if (kind == "week") {
@@ -512,6 +519,15 @@ const OneDay = (prop: TOneDay) => {
     if (date.isSame(moment(), "day")) {
         dateColor = "coral";
     }
+    schedule?.forEach((element: ScheduleDTO) => {
+        if (date.isSame(moment(element.startDate), "day") || date.isSame(moment(element.endDate), "day")) {
+            OneScheduleDay = {
+                state: true,
+                border: 2.5,
+                color: element.color,
+            };
+        }
+    });
 
     const styles = StyleSheet.create({
         container: {
@@ -539,10 +555,10 @@ const OneDay = (prop: TOneDay) => {
                     position: "absolute",
                     overflow: "hidden",
                     borderRadius: 30,
-                    borderWidth: OnePlanDay.state ? OnePlanDay.border : 1,
+                    borderWidth: OneScheduleDay.state ? OneScheduleDay.border : 1,
                     zIndex: 1000,
                     backgroundColor: dateColor,
-                    borderColor: OnePlanDay.state ? OnePlanDay.color : buttonBorderColor,
+                    borderColor: OneScheduleDay.state ? OneScheduleDay.color : buttonBorderColor,
                     width: 36,
                     height: 36,
                 }}
@@ -572,7 +588,7 @@ const OneDay = (prop: TOneDay) => {
                             height: 0,
                         }}
                     ></View>
-                    <>{planBarL}</>
+                    <>{scheduleBarL}</>
                 </View>
             )}
             {cornerR == null && (
@@ -586,7 +602,7 @@ const OneDay = (prop: TOneDay) => {
                             height: 0,
                         }}
                     ></View>
-                    <>{planBarR}</>
+                    <>{scheduleBarR}</>
                 </View>
             )}
             {cornerR}

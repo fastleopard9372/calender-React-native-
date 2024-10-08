@@ -3,8 +3,8 @@ import { View, StyleSheet } from "react-native";
 import { TextInput, Text, Button, Icon, Chip } from "react-native-paper";
 import { Link } from "@react-navigation/native";
 import { AxiosError, AxiosResponse } from "axios";
-import ToastManager, { Toast } from "toastify-react-native";
-import LanguageBar from "../components/languageBar";
+import { Toast } from "toastify-react-native";
+import LanguageBar from "../components/common/languageBar";
 import { useAppSelector, useAppDispatch } from "../redux/hook";
 import { getData, setUserProps, setAccessTokenProps } from "../redux/authSlice";
 import ENCHINTL from "../lang/EN-CH.json";
@@ -60,7 +60,6 @@ const SignIn = (props) => {
     }
     return (
         <View style={styles.container}>
-            <ToastManager width={400} />
             <View style={{ position: "absolute", zIndex: 100, top: 16, right: 16 }}>
                 <LanguageBar />
             </View>

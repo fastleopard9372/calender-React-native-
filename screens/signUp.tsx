@@ -2,10 +2,10 @@ import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { TextInput, Text, Button, Icon, Chip } from "react-native-paper";
 import { Link } from "@react-navigation/native";
-import ToastManager, { Toast } from "toastify-react-native";
+import { Toast } from "toastify-react-native";
 import { useAppSelector, useAppDispatch } from "../redux/hook";
 import { getData, setLanguage } from "../redux/authSlice";
-import LanguageBar from "../components/languageBar";
+import LanguageBar from "../components/common/languageBar";
 import ENCHINTL from "../lang/EN-CH.json";
 import { signUp } from "../api";
 import { SignUpDTO } from "../type";
@@ -67,7 +67,6 @@ const SignUp = (props) => {
     }
     return (
         <View style={styles.container}>
-            <ToastManager width={400} />
             <View style={{ position: "absolute", zIndex: 100, top: 16, right: 16 }}>
                 <LanguageBar />
             </View>

@@ -1,27 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
 import { RootState } from "./store";
-import { TPlan, TScheduleKind, UserDTO } from "../type";
+import { TaskDTO, TScheduleKind, UserDTO, ScheduleDTO } from "../type";
 const initialState: {
     user: UserDTO;
     date: string;
     kind: string;
-    plan: TPlan[] | undefined;
+    schedule: ScheduleDTO[] | null;
     isShowDialog: boolean;
     isTaskShowShowDialog: boolean;
+    isTodoListShowDialog: boolean;
     scheduleKind: TScheduleKind[];
     colors: string[];
     thickness: number[];
-    newPlan: TPlan;
+    newSchedule: ScheduleDTO;
+    newTask: TaskDTO;
     action: string;
     language: "En" | "中文";
+    refresh: boolean;
 } = {
     user: null,
     date: moment(new Date()).format("20YY-MM-DD"),
     kind: "month_1",
-    plan: undefined,
+    schedule: null,
     isShowDialog: false,
     isTaskShowShowDialog: false,
+    isTodoListShowDialog: false,
     scheduleKind: [
         // { _id: "1", name: "meeting" },
         // { _id: "2", name: "dating" },
@@ -48,25 +52,30 @@ const initialState: {
         "coral",
     ],
     thickness: [2, 3, 4, 5, 6],
-    newPlan: {
-        _id: "",
+    newSchedule: {
+        id: 0,
         color: "indigo",
         width: 2,
         startDate: moment(new Date()).format("YYYY-MM-DD"),
         endDate: moment(new Date()).format("YYYY-MM-DD"),
-        demo: "",
-        kind: "-1",
+        description: "",
+        type: "-1",
         title: "",
-        user: {
-            id: "",
-            username: "",
-            email: "",
-        },
-        __v: "",
-        createdAt: "",
-        updatedAt: "",
+        createAt: "",
+        updateAt: "",
     },
+    newTask: {
+        id: -1,
+        title: "",
+        description: "",
+        dueDate: moment(new Date()).format("YYYY-MM-DD"),
+        startTime: moment(new Date()).format("YYYY-MM-DD 08:00"),
+        endTime: moment(new Date()).format("YYYY-MM-DD 16:00"),
+        complete: false,
+    },
+
     action: "create",
+    refresh: true,
     language: "En",
 };
 export const CalenderSlice = createSlice({
@@ -76,11 +85,17 @@ export const CalenderSlice = createSlice({
         setLanguage(state, action) {
             state.language = action.payload;
         },
+        refresh(state) {
+            state.refresh = !state.refresh;
+        },
         setDate(state, action) {
             state.date = action.payload;
         },
-        setNewPlan(state, action) {
-            state.newPlan = action.payload;
+        setNewSchedule(state, action) {
+            state.newSchedule = action.payload;
+        },
+        setNewTask(state, action) {
+            state.newTask = action.payload;
         },
         setAction(state, action) {
             state.action = action.payload;
@@ -88,35 +103,37 @@ export const CalenderSlice = createSlice({
         setKind(state, action) {
             state.kind = action.payload;
         },
-        setPlan(state, action) {
-            const plan: TPlan[] = action.payload;
-            state.plan = plan.sort((a, b) => (moment(a.startDate).isBefore(moment(b.startDate)) ? -1 : 1));
+        setSchedule(state, action) {
+            state.schedule = action.payload;
         },
-        addPlan(state, action) {
-            state.plan?.push(action.payload);
-            state.newPlan = action.payload;
+        addSchedule(state, action) {
+            state.schedule?.push(action.payload);
+            state.newSchedule = action.payload;
         },
-        updatePlan(state, action) {
-            state.plan = state.plan?.map((v: TPlan, i: number) => {
-                if (v._id === action.payload._id) return action.payload;
+        updateSchedule(state, action) {
+            state.schedule = state.schedule?.map((v: ScheduleDTO, i: number) => {
+                if (v === action.payload.id) return action.payload;
                 else return v;
             });
-            state.newPlan = action.payload;
+            state.newSchedule = action.payload;
         },
-        deletePlan(state, action) {
-            state.plan = state.plan?.filter((v: TPlan) => {
-                return v._id != action.payload;
+        deleteSchedule(state, action) {
+            state.schedule = state.schedule?.filter((v: ScheduleDTO) => {
+                return v.id != action.payload;
             });
         },
-        setDateAndPlan(state, action) {
+        setDateAndSchedule(state, action) {
             state.date = action.payload.date;
-            state.plan = action.payload.plan;
+            state.schedule = action.payload.schedule;
         },
         setIsShowDialog(state, action) {
             state.isShowDialog = action.payload;
         },
         setIsTaskShowShowDialog(state, action) {
             state.isTaskShowShowDialog = action.payload;
+        },
+        setIsTodoListShowDialog(state, action) {
+            state.isTodoListShowDialog = action.payload;
         },
         addNewScheduleKind(state, action) {
             state.scheduleKind.push(action.payload);
@@ -131,15 +148,18 @@ export const {
     setLanguage,
     setDate,
     setKind,
-    setPlan,
-    addPlan,
-    updatePlan,
-    deletePlan,
+    setSchedule,
+    addSchedule,
+    updateSchedule,
+    refresh,
+    deleteSchedule,
     setAction,
-    setNewPlan,
-    setDateAndPlan,
+    setNewSchedule,
+    setNewTask,
+    setDateAndSchedule,
     setIsShowDialog,
     setIsTaskShowShowDialog,
+    setIsTodoListShowDialog,
     addNewScheduleKind,
     getScheduleKind,
 } = CalenderSlice.actions;

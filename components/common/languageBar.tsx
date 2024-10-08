@@ -1,8 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 import { Chip } from "react-native-paper";
-import { useAppSelector, useAppDispatch } from "../redux/hook";
-import { getData, setLanguage } from "../redux/authSlice";
+import { useAppSelector, useAppDispatch } from "../../redux/hook";
+import { getData, setLanguage } from "../../redux/authSlice";
 const LanguageBar = () => {
     const intl = useAppSelector(getData).language;
     const dispatch = useAppDispatch();

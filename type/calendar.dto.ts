@@ -9,3 +9,13 @@ export interface DayDTO {
     isSunday: boolean;
     schedules: ScheduleDTO[];
 }
+
+export interface OneDayDTO {
+    color?: string | "indigo";
+    width: number;
+    datesCnt?: number;
+    date: string;
+    month: number;
+    no: number;
+    schedule?: ScheduleDTO[];
+}
